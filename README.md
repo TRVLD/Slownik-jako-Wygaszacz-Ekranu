@@ -7,12 +7,26 @@ oceanu, figury Lublina albo barwy Wrocławia) pokazuje dużą czcionką losowe h
 ze *Słownika Języka Polskiego* (i opcjonalnie z angielskiego słownika
 *Wordset*) wraz z definicją.
 
+<p align="center">
+  <img width="640" alt="Aurora Borealis" src="https://github.com/user-attachments/assets/3c5a7020-3b86-4f98-a653-20cf3cd54f10" /><br>
+  <b>Aurora Borealis</b>
+</p>
 
-<img width="640" height="360" alt="aurora-borealis-zorza-aurora" src="https://github.com/user-attachments/assets/3c5a7020-3b86-4f98-a653-20cf3cd54f10" />
-Aurora Borealis
+<p align="center">
+  <img width="640" alt="Wroclove Herbowy" src="https://github.com/user-attachments/assets/d569f005-7402-439e-99bd-52d8368193ee" /><br>
+  <b>Wroclove Herbowy</b>
+</p>
 
-<img width="640" height="360" alt="podglad-wroclove-herbowy" src="https://github.com/user-attachments/assets/d569f005-7402-439e-99bd-52d8368193ee" />
-Wroclove Herbowy
+<p align="center">
+  <img width="640" alt="Lublin Renesans" src="https://github.com/user-attachments/assets/9d43e157-8ebf-4c48-95da-e2c05a95bb23" /><br>
+  <b>Lublin Renesans</b>
+</p>
+
+<p align="center">
+  <img width="640" alt="Blue Ocean" src="https://github.com/user-attachments/assets/8d18555e-b27a-4dc6-844b-6130a195137e" /><br>
+  <b>Blue Ocean</b>
+</p>
+
 
 Autor: **[Mariusz T. Jaroszek](https://www.linkedin.com/in/jaroszek/)** · licencja **EUPL 1.2** ([wersja polska](https://eupl.eu/1.2/pl/),
 plik `LICENSE`) · udostępniane „tak jak jest” (as-is), bez gwarancji; autor nie
@@ -33,11 +47,7 @@ odpowiada za błędy. Wtyczka powstała we współpracy z Claude (Anthropic).
   do aplikacji ani do pola hasła).
 - Działa na Waylandzie: bezczynność mierzy monitor wbudowany w Mutter.
 
-<img width="640" height="360" alt="lu" src="https://github.com/user-attachments/assets/9d43e157-8ebf-4c48-95da-e2c05a95bb23" />
-Lublin Renesans
 
-<img width="640" height="360" alt="blue-ocean-lososiowate" src="https://github.com/user-attachments/assets/8d18555e-b27a-4dc6-844b-6130a195137e" />
-Blue Ocean
 
 ## Instalacja (2 minuty)
 
