@@ -7,6 +7,9 @@ oceanu, figury Lublina albo barwy Wrocławia) pokazuje dużą czcionką losowe h
 ze *Słownika Języka Polskiego* (i opcjonalnie z angielskiego słownika
 *Wordset*) wraz z definicją.
 
+<img width="640" height="360" alt="aurora-borealis-zorza-aurora" src="https://github.com/user-attachments/assets/3c5a7020-3b86-4f98-a653-20cf3cd54f10" />
+
+
 <img width="720" height="405" alt="podglad-wroclove-herbowy" src="https://github.com/user-attachments/assets/d569f005-7402-439e-99bd-52d8368193ee" />
 
 
@@ -28,6 +31,11 @@ odpowiada za błędy. Wtyczka powstała we współpracy z Claude (Anthropic).
   dotyku albo naciśnięciu dowolnego klawisza (naciśnięty klawisz nie trafia
   do aplikacji ani do pola hasła).
 - Działa na Waylandzie: bezczynność mierzy monitor wbudowany w Mutter.
+
+<img width="960" height="540" alt="lu" src="https://github.com/user-attachments/assets/9d43e157-8ebf-4c48-95da-e2c05a95bb23" />
+
+<img width="640" height="360" alt="blue-ocean-lososiowate" src="https://github.com/user-attachments/assets/8d18555e-b27a-4dc6-844b-6130a195137e" />
+
 
 ## Instalacja (2 minuty)
 
