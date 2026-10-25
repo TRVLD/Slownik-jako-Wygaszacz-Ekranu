@@ -1,0 +1,126 @@
+
+.wyraz-kicker {
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.32em;
+  text-align: center;
+}
+
+.wyraz-word {
+  color: #f7f3e8;
+  text-align: center;
+  font-weight: normal;
+}
+
+.wyraz-rule {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.wyraz-definition {
+  color: #eef1f4;
+  font-style: italic;
+  text-align: center;
+}
+
+.wyraz-footer {
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.wyraz-aurora .wyraz-word {
+  color: #f4f6ee;
+  text-shadow: 0 0 34px rgba(110, 255, 190, 0.32);
+}
+.wyraz-aurora .wyraz-rule {
+  background-color: rgba(150, 255, 210, 0.55);
+}
+.wyraz-aurora .wyraz-definition {
+  color: #e6efe9;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.65);
+}
+
+.wyraz-ocean .wyraz-word {
+  color: #f1f8fb;
+  text-shadow: 0 0 34px rgba(110, 210, 255, 0.34);
+}
+.wyraz-ocean .wyraz-rule {
+  background-color: rgba(150, 220, 255, 0.55);
+}
+.wyraz-ocean .wyraz-definition {
+  color: #e3eef4;
+  text-shadow: 0 1px 12px rgba(0, 10, 30, 0.7);
+}
+
+.wyraz-lublin .wyraz-word {
+  color: #ffffff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+}
+.wyraz-lublin .wyraz-kicker {
+  color: #75b94a;
+  letter-spacing: 0.4em;
+}
+.wyraz-lublin .wyraz-rule {
+  height: 4px;
+  background-color: #e61e29;
+}
+.wyraz-lublin .wyraz-definition {
+  color: #f2f2f2;
+  font-style: normal;
+  font-weight: 300;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.95);
+}
+.wyraz-lublin .wyraz-footer {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.wyraz-wroclove .wyraz-word {
+  color: #231f20;
+  font-weight: bold;
+}
+.wyraz-wroclove .wyraz-kicker {
+  color: #231f20;
+  letter-spacing: 0.3em;
+}
+.wyraz-wroclove .wyraz-rule {
+  height: 3px;
+  background-color: #231f20;
+}
+.wyraz-wroclove .wyraz-definition {
+  color: #231f20;
+  font-style: normal;
+}
+.wyraz-wroclove .wyraz-footer {
+  color: rgba(35, 31, 32, 0.65);
+}
+
+.wyraz-code-box {
+  border-radius: 14px;
+  background-color: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.wyraz-code-title {
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.wyraz-code-slot {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+}
+.wyraz-code-slot.filled {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+.wyraz-code-message {
+  color: #ff9a9a;
+  text-align: center;
+}
+.wyraz-aurora .wyraz-code-slot.filled { border-color: rgba(150, 255, 210, 0.85); }
+.wyraz-ocean .wyraz-code-slot.filled { border-color: rgba(150, 220, 255, 0.85); }
+.wyraz-lublin .wyraz-code-box { border-color: rgba(230, 30, 41, 0.6); border-radius: 0; }
+.wyraz-lublin .wyraz-code-slot { border-radius: 0; }
+.wyraz-lublin .wyraz-code-slot.filled { border-color: #75b94a; }
+
+.wyraz-wroclove .wyraz-code-slot.filled { border-color: #fdcf00; }

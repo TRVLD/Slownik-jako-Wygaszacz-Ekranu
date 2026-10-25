@@ -1,0 +1,15 @@
+{
+  "uuid": "wyraz@jaroszek.eu",
+  "name": "Słownik jako Wygaszacz Ekranu",
+  "description": "Screensaver that displays Polish and English dictionary entries",
+  "shell-version": [
+    "50"
+  ],
+  "url": "https://github.com/TRVLD/Slownik-jako-Wygaszacz-Ekranu/",
+  "session-modes": [
+    "user",
+    "unlock-dialog"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.wyraz",
+  "version-name": "1.7.1"
+}

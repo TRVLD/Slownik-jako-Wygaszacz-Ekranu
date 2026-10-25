@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <enum id="org.gnome.shell.extensions.wyraz.BackgroundStyle">
+    <value nick="aurora" value="0"/>
+    <value nick="ocean" value="1"/>
+    <value nick="lublin" value="2"/>
+    <value nick="wroclove" value="3"/>
+  </enum>
+
+  <schema id="org.gnome.shell.extensions.wyraz" path="/org/gnome/shell/extensions/wyraz/">
+    <key name="words-per-day" type="i">
+      <range min="0" max="100"/>
+      <default>5</default>
+      <summary>Liczba polskich haseł dziennie</summary>
+      <description>Ile haseł ze słownika polskiego jest losowanych na każdy dzień. Wygaszacz pokazuje je po kolei i powtarza w ciągu dnia.</description>
+    </key>
+
+    <key name="words-per-day-en" type="i">
+      <range min="0" max="100"/>
+      <default>0</default>
+      <summary>Liczba angielskich haseł dziennie</summary>
+      <description>Ile haseł ze słownika angielskiego (Wordset) jest losowanych na każdy dzień; przeplatane z polskimi.</description>
+    </key>
+
+    <key name="change-interval" type="i">
+      <range min="5" max="3600"/>
+      <default>30</default>
+      <summary>Czas wyświetlania jednego hasła (sekundy)</summary>
+      <description>Co ile sekund wygaszacz przechodzi do następnego hasła.</description>
+    </key>
+
+    <key name="idle-minutes" type="i">
+      <range min="1" max="240"/>
+      <default>3</default>
+      <summary>Czas bezczynności przed uruchomieniem (minuty)</summary>
+      <description>Po ilu minutach bez ruchu myszy i bez naciśnięcia klawisza włącza się wygaszacz. Minimum to 1 minuta.</description>
+    </key>
+
+    <key name="background-style" enum="org.gnome.shell.extensions.wyraz.BackgroundStyle">
+      <default>'aurora'</default>
+      <summary>Styl tła</summary>
+      <description>Animowane tło wygaszacza: aurora (zorza polarna), ocean, lublin (Lublin Renesans) albo wroclove (Wroclove Herbowy).</description>
+    </key>
+
+    <key name="renaissance-font" type="s">
+      <default>'Quintessential'</default>
+      <summary>Krój haseł w stylu Lublin Renesans</summary>
+      <description>Odręczne pismo renesansowe używane do haseł w stylu Lublin Renesans (Quintessential, Fondamento albo Carattere).</description>
+    </key>
+
+    <key name="wroclove-text-font" type="s">
+      <default>'Belleza'</default>
+      <summary>Krój definicji w stylu Wroclove Herbowy</summary>
+      <description>Belleza (w duchu Optimy), Hind (w duchu Frutigera) albo systemowy Adwaita Sans.</description>
+    </key>
+
+    <key name="font-family" type="s">
+      <default>'C059'</default>
+      <summary>Krój pisma</summary>
+      <description>Rodzina czcionki szeryfowej używana do hasła i definicji.</description>
+    </key>
+
+    <key name="show-on-lock-screen" type="b">
+      <default>true</default>
+      <summary>Pokazuj także na ekranie blokady</summary>
+      <description>Gdy sesja jest zablokowana, wygaszacz może przykryć ekran blokady po upływie czasu bezczynności. Dowolny ruch lub klawisz przywraca ekran blokady.</description>
+    </key>
+
+    <key name="respect-inhibitors" type="b">
+      <default>true</default>
+      <summary>Nie przeszkadzaj podczas filmów i prezentacji</summary>
+      <description>Nie uruchamiaj wygaszacza, gdy aplikacja (np. odtwarzacz wideo albo przeglądarka z filmem) blokuje bezczynność sesji.</description>
+    </key>
+
+    <key name="unlock-code-enabled" type="b">
+      <default>false</default>
+      <summary>Wymagaj kodu do zamknięcia wygaszacza</summary>
+      <description>Gdy włączone i kod jest ustawiony, ruch myszy lub klawisz pokazuje pole kodu zamiast zamykać wygaszacz.</description>
+    </key>
+
+    <key name="unlock-code" type="s">
+      <default>''</default>
+      <summary>Skrót kodu zamykającego (wewnętrzne)</summary>
+      <description>Sól i skrót SHA-256 kodu (1–6 liter lub cyfr). Sam kod nie jest zapisywany.</description>
+    </key>
+
+    <key name="reset-today-request" type="i">
+      <default>0</default>
+      <summary>Żądanie nowego losowania haseł na dziś (wewnętrzne)</summary>
+      <description>Zwiększane przez okno ustawień, aby wylosować dzisiejsze hasła od nowa.</description>
+    </key>
+
+    <key name="preview-request" type="i">
+      <default>0</default>
+      <summary>Żądanie podglądu (wewnętrzne)</summary>
+      <description>Zwiększane przez okno ustawień, aby uruchomić podgląd wygaszacza.</description>
+    </key>
+  </schema>
+</schemalist>
