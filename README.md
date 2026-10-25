@@ -52,7 +52,7 @@ odpowiada za błędy. Wtyczka powstała we współpracy z Claude (Anthropic).
 ## Instalacja (2 minuty)
 
 ```bash
-cd wyraz-screensaver
+cd Slownik-jako-Wygaszacz-Ekranu
 ./install.sh
 ```
 
@@ -127,10 +127,7 @@ Wielkość liter ma znaczenie.
   dostępem do komputera. Nie wyłączaj ani nie osłabiaj z jego powodu hasła
   konta, blokady ekranu GNOME (Super+L) ani innych zabezpieczeń.
 
-**Zapomniany kod:** przejdź do konsoli tekstowej (Ctrl+Alt+F3), zaloguj się
-na to samo konto i uruchom `tools/wylacz-kod.sh` z pobranego folderu wyraz-screensaver
-(albo ręcznie te same polecenia `gsettings`). Wróć do GNOME (Ctrl+Alt+F2
-lub F1) i porusz myszą.
+**Zapomniany kod:** dezaktywuj wtyczkę z poziomu niegraficznej sesji, albo wyłącz i włącz komputer, otwórz ustawienia wtyczki i usuń kod
 
 ### Ważne: systemowe wygaszanie ekranu
 
