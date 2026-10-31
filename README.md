@@ -250,7 +250,6 @@ publikacją rozszerzenia warto sprawdzić zasady korzystania z tych znaków.
 ```
 wyraz-screensaver/
 ├── install.sh, uninstall.sh, README.md, LICENSE
-├── tools/                    budowanie bazy haseł
 └── wyraz@jaroszek.eu/        właściwe rozszerzenie
     ├── LICENSE               EUPL-1.2
     ├── metadata.json
