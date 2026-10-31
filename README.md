@@ -227,13 +227,7 @@ nazwy mieszkańców miast i wsi oraz marek i produktów wielką literą
 nienajgorzej łącznie, „czy by” osobno, Pustynia Gobi i Pałac Paca wielką
 literą.
 
-Zmiany wprowadza skrypt `tools/build_words.py` na podstawie reguł, a nie
-listy zmian z sjp.pl: listy nowych i zmienionych haseł z sjp.pl nie udało
-się pobrać w całości. Nazwy mieszkańców i marek trafiają do bazy jako
-osobne hasła pisane wielką literą (np. Wrocławianka, Wrocławiak,
-Lublinianin, Audi), a jeśli wyraz ma też pospolite znaczenie (krakowiak —
-taniec), to znaczenie zostaje pod hasłem małą literą. Te same nazwy są
-poprawiane w definicjach innych haseł, także w odmianie. Hasła dodane do
+ Te same nazwy są poprawiane w definicjach innych haseł, także w odmianie. Hasła dodane do
 sjp.pl po 2019 r. nie są w bazie. Baza liczy 96 304 hasła.
 
 Angielskie hasła pochodzą ze słownika
@@ -243,16 +237,6 @@ literą, bez znaczeń obraźliwych i czysto taksonomicznych; treść definicji
 nie jest zmieniana. Plik `data/words-en.tsv` jest udostępniany na licencji
 CC BY-SA 4.0 (szczegóły w `data/LICENSE-words-en.txt`), niezależnie od
 licencji EUPL samej wtyczki.
-
-Odtworzenie bazy od zera:
-
-```bash
-./tools/pobierz-slownik.sh
-```
-
-Skrypt pobiera słownik w formacie StarDict i filtruje go
-(`tools/build_words.py`). Bazę angielską odtwarza
-`./tools/pobierz-slownik-en.sh` (`tools/build_words_en.py`).
 
 Czcionki Quintessential, Fondamento, Carattere, Exo 2, Crimson Text,
 Belleza i Hind pochodzą z
