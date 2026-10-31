@@ -1,6 +1,6 @@
 
 export const EXTENSION_NAME = 'Słownik jako Wygaszacz Ekranu';
-export const AUTHOR = 'Mariusz T. Jaroszek';
+export const AUTHOR = 'M.T. Jaroszek';
 export const AUTHOR_URL = 'https://www.linkedin.com/in/jaroszek/';
 export const LICENSE = {
     name: 'EUPL 1.2',
@@ -48,12 +48,24 @@ export const COMPONENTS = [
                 'https://fonts.google.com/specimen/Carattere'],
             ['Exo 2', 'OFL-1.1', 'definicje w stylu Lublin Renesans; © 2013 The Exo 2 Project Authors',
                 'https://fonts.google.com/specimen/Exo+2'],
+            ['Tilt Neon', 'OFL-1.1', 'zegar w stylu Neon; © 2019 The Tilt Project Authors',
+                'https://fonts.google.com/specimen/Tilt+Neon'],
+            ['Wyraz Futhark', 'OFL-1.1', 'zegar w stylu Futhark Runes, cyfry narysowane dla wtyczki; © 2026 M.T. Jaroszek',
+                'https://github.com/TRVLD/Slownik-jako-Wygaszacz-Ekranu/'],
+            ['Inter', 'OFL-1.1', 'zegar w stylu San Francisco (otwarty zamiennik kroju Apple); © 2020 The Inter Project Authors',
+                'https://fonts.google.com/specimen/Inter'],
+            ['Source Sans 3', 'OFL-1.1', 'zegar w stylu Source Sans Pro Black; © 2010-2020 Adobe',
+                'https://fonts.google.com/specimen/Source+Sans+3'],
+            ['EB Garamond', 'OFL-1.1', 'zegar w stylu Garamond; © 2017 The EB Garamond Project Authors',
+                'https://fonts.google.com/specimen/EB+Garamond'],
         ],
     },
     {
         group: 'Czcionki systemowe',
         items: [
-            ['C059 (URW base35)', 'AGPL-3.0 z wyjątkiem dla czcionek', 'domyślny krój stylów Aurora i Ocean',
+            ['P052 (URW base35)', 'AGPL-3.0 z wyjątkiem dla czcionek', 'domyślny wariant stylów Aurora Borealis i Blue Ocean',
+                'https://github.com/ArtifexSoftware/urw-base35-fonts'],
+            ['C059 (URW base35)', 'AGPL-3.0 z wyjątkiem dla czcionek', 'wariant stylów Aurora Borealis i Blue Ocean',
                 'https://github.com/ArtifexSoftware/urw-base35-fonts'],
             ['Adwaita Sans', 'OFL-1.1', 'opcjonalny krój definicji w stylu Wroclove Herbowy',
                 'https://gitlab.gnome.org/GNOME/adwaita-fonts'],
@@ -70,17 +82,6 @@ export const COMPONENTS = [
             ['GLib / GIO', 'LGPL-2.1-or-later', 'pliki, ustawienia, D-Bus', 'https://gitlab.gnome.org/GNOME/glib'],
             ['Pango', 'LGPL-2.0-or-later', 'składanie tekstu', 'https://gitlab.gnome.org/GNOME/pango'],
             ['Cairo', 'LGPL-2.1-only OR MPL-1.1', 'rysowanie figur i serca', 'https://www.cairographics.org'],
-        ],
-    },
-    {
-        group: 'Narzędzia użyte przy tworzeniu (niedołączone)',
-        items: [
-            ['Mesa', 'MIT', 'kompilacja i podgląd shaderów', 'https://mesa3d.org'],
-            ['Python', 'PSF-2.0', 'budowa bazy haseł', 'https://www.python.org'],
-            ['Pillow', 'MIT-CMU', 'podglądy i porównania obrazów', 'https://python-pillow.org'],
-            ['fontTools', 'MIT', 'sprawdzanie polskich znaków w czcionkach', 'https://github.com/fonttools/fonttools'],
-            ['Node.js', 'MIT', 'testy logiki wtyczki', 'https://nodejs.org'],
-            ['Git', 'GPL-2.0-only', 'pobieranie źródeł i czcionek', 'https://git-scm.com'],
         ],
     },
 ];

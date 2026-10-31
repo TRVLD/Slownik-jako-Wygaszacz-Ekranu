@@ -1,5 +1,6 @@
 import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
+import Pango from 'gi://Pango';
 import St from 'gi://St';
 
 import {MAX_LENGTH, isCodeChar, verify} from './unlockCode.js';
@@ -51,6 +52,7 @@ export class CodePrompt {
             x_align: Clutter.ActorAlign.CENTER,
             style: `font-size: ${Math.round(H * 0.019)}px; margin-bottom: ${Math.round(H * 0.016)}px;`,
         });
+        this._title.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         this._box.add_child(this._title);
 
         const slotsRow = new St.BoxLayout({x_align: Clutter.ActorAlign.CENTER});
@@ -81,6 +83,7 @@ export class CodePrompt {
             x_align: Clutter.ActorAlign.CENTER,
             style: `font-size: ${Math.round(H * 0.015)}px; margin-top: ${Math.round(H * 0.014)}px;`,
         });
+        this._message.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         this._box.add_child(this._message);
 
         parent.add_child(this.actor);

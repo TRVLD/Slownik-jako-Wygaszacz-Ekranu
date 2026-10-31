@@ -5,7 +5,7 @@ import Gtk from 'gi://Gtk';
 
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-import {AI_NOTE, AUTHOR, AUTHOR_URL, COMPONENTS, DOCS_URL, EXTENSION_NAME, LICENSE, REPO_URL} from './lib/credits.js';
+import {AI_NOTE, AUTHOR, AUTHOR_URL, COMPONENTS, DOCS_URL, EXTENSION_NAME, LICENSE} from './lib/credits.js';
 import {SearchIndex, searchAll} from './lib/search.js';
 import {formatDefinition, indexDatabase} from './lib/selection.js';
 import {hasCode, isValidCode, makeStored} from './lib/unlockCode.js';
@@ -20,7 +20,6 @@ const STYLES = [
 const FONTS = [
     ['C059', 'C059 (Century Schoolbook)'],
     ['TeX Gyre Schola', 'TeX Gyre Schola'],
-    ['Century Schoolbook', 'Century Schoolbook'],
     ['P052', 'P052 (Palatino)'],
     ['serif', 'Systemowa szeryfowa'],
 ];
@@ -37,12 +36,59 @@ const WROCLOVE_FONTS = [
     ['Adwaita Sans', 'Adwaita Sans (systemowy GNOME)'],
 ];
 
+const CLOCK_SIZES = [
+    ['small', 'Mały'],
+    ['medium', 'Średni'],
+    ['large', 'Duży'],
+    ['huge', 'Bardzo duży'],
+];
+
+const CLOCK_POSITIONS = [
+    ['random', 'Losowo'],
+    ['special', 'Specjalnie'],
+    ['custom', 'Własne'],
+];
+
+const CLOCK_STYLES = [
+    ['neon', 'Neon'],
+    ['futhark', 'Futhark Runes'],
+    ['sanfrancisco', 'San Francisco'],
+    ['sourcesans', 'Source Sans Pro Black'],
+    ['garamond', 'Garamond'],
+];
+
+const CLOCK_FOR_STYLE = {
+    aurora: 'futhark',
+    ocean: 'sourcesans',
+    lublin: 'sanfrancisco',
+    wroclove: 'garamond',
+};
+
+const VARIANTS = {
+    aurora: ['font-family', FONTS],
+    ocean: ['font-family', FONTS],
+    lublin: ['renaissance-font', RENAISSANCE_FONTS],
+    wroclove: ['wroclove-text-font', WROCLOVE_FONTS],
+};
+
 const esc = s => GLib.markup_escape_text(String(s), -1);
 
 const STATE_PATH = GLib.build_filenamev([GLib.get_user_data_dir(),
     'wyraz-screensaver', 'state.json']);
 
 const LANG_LABEL = {pl: 'PL', en: 'EN'};
+
+const PL_DAYS = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+const PL_MONTHS = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+    'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+
+function polishDay(key) {
+    const [y, m, d] = String(key).split('-').map(Number);
+    if (!y || !m || !d)
+        return String(key);
+    const dt = GLib.DateTime.new_local(y, m, d, 12, 0, 0);
+    return `${PL_DAYS[dt.get_day_of_week() % 7]}, ${d} ${PL_MONTHS[m - 1]} ${y}`;
+}
 
 function readState() {
     try {
@@ -135,7 +181,7 @@ export default class WyrazPreferences extends ExtensionPreferences {
         });
 
         window.add(this._settingsPage(window, settings, track));
-        window.add(this._dictionaryPage(window));
+        window.add(this._dictionaryPage(window, settings, track));
         window.add(this._aboutPage(window));
     }
 
@@ -144,6 +190,11 @@ export default class WyrazPreferences extends ExtensionPreferences {
             title: 'Ustawienia',
             icon_name: 'preferences-system-symbolic',
         });
+
+        const start = new Adw.PreferencesGroup();
+        start.add(spinRow(settings, 'idle-minutes', 'Uruchom po bezczynności (minuty)',
+            'Brak ruchu myszy i naciśnięć klawiszy, minimum 1 minuta', 1, 240));
+        page.add(start);
 
         const words = new Adw.PreferencesGroup({
             title: 'Słowa',
@@ -180,12 +231,92 @@ export default class WyrazPreferences extends ExtensionPreferences {
         const missing = fam => fam !== 'serif' && !installed.has(fam.toLowerCase());
         const notInstalled = 'Czcionki stylu nie są zainstalowane, uruchom ponownie install.sh i zaloguj się';
 
-        const fontRow = comboRow(settings, 'font-family', 'Krój pisma', FONTS, track);
-        const renRow = comboRow(settings, 'renaissance-font', 'Pismo haseł', RENAISSANCE_FONTS, track);
-        const wroRow = comboRow(settings, 'wroclove-text-font', 'Krój definicji', WROCLOVE_FONTS, track);
-        look.add(fontRow);
-        look.add(renRow);
-        look.add(wroRow);
+        const variantRow = new Adw.ComboRow({title: 'Wariant'});
+        let variant = null;
+        let syncingVariant = false;
+        const selectVariant = () => {
+            const i = variant.items.findIndex(([id]) => id === settings.get_string(variant.key));
+            syncingVariant = true;
+            variantRow.selected = i >= 0 ? i : 0;
+            syncingVariant = false;
+        };
+        const rebuildVariants = () => {
+            const [key, items] = VARIANTS[settings.get_string('background-style')] ?? VARIANTS.aurora;
+            if (variant?.key === key) {
+                selectVariant();
+                return;
+            }
+            variant = {key, items};
+            const model = new Gtk.StringList();
+            for (const [, label] of items)
+                model.append(label);
+            syncingVariant = true;
+            variantRow.model = model;
+            syncingVariant = false;
+            selectVariant();
+        };
+        variantRow.connect('notify::selected', () => {
+            if (syncingVariant || !variant)
+                return;
+            const id = variant.items[variantRow.selected]?.[0];
+            if (id && id !== settings.get_string(variant.key))
+                settings.set_string(variant.key, id);
+        });
+        rebuildVariants();
+        track(settings, settings.connect('changed::background-style', rebuildVariants));
+        for (const key of ['font-family', 'renaissance-font', 'wroclove-text-font']) {
+            track(settings, settings.connect(`changed::${key}`, () => {
+                if (variant?.key === key)
+                    selectVariant();
+            }));
+        }
+        look.add(variantRow);
+
+        const clockRow = new Adw.ExpanderRow({
+            title: 'Pokaż zegar',
+            show_enable_switch: true,
+        });
+        settings.bind('clock-enabled', clockRow, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT);
+        clockRow.expanded = settings.get_boolean('clock-enabled');
+        track(settings, settings.connect('changed::clock-enabled', () => {
+            clockRow.expanded = settings.get_boolean('clock-enabled');
+        }));
+        const xRow = spinRow(settings, 'clock-x', 'X (%)',
+            '0: przy lewej krawędzi, 50: pośrodku, 100: przy prawej.', 0, 100);
+        const yRow = spinRow(settings, 'clock-y', 'Y (%)',
+            '0: przy górnej krawędzi, 50: pośrodku, 100: przy dolnej.', 0, 100);
+        const syncCustom = () => {
+            const custom = settings.get_string('clock-position') === 'custom';
+            xRow.visible = custom;
+            yRow.visible = custom;
+        };
+        syncCustom();
+        track(settings, settings.connect('changed::clock-position', syncCustom));
+        for (const row of [
+            spinRow(settings, 'clock-transparency', 'Transparentność zegara (%)', '', 5, 95),
+            comboRow(settings, 'clock-size', 'Rozmiar zegara', CLOCK_SIZES, track),
+            comboRow(settings, 'clock-position', 'Położenie zegara', CLOCK_POSITIONS, track),
+            xRow,
+            yRow,
+            comboRow(settings, 'clock-style', 'Styl zegara', CLOCK_STYLES, track),
+        ])
+            clockRow.add_row(row);
+        look.add(clockRow);
+        const defaultClockSize = () => {
+            const size = settings.get_string('background-style') === 'wroclove' ? 'huge' : 'medium';
+            if (settings.get_boolean('clock-enabled') && settings.get_string('clock-size') !== size)
+                settings.set_string('clock-size', size);
+        };
+        track(settings, settings.connect('changed::background-style', () => {
+            const suggested = CLOCK_FOR_STYLE[settings.get_string('background-style')];
+            if (suggested && settings.get_string('clock-style') !== suggested)
+                settings.set_string('clock-style', suggested);
+            defaultClockSize();
+        }));
+        track(settings, settings.connect('changed::clock-position', () => {
+            if (settings.get_string('clock-position') === 'special')
+                defaultClockSize();
+        }));
 
         const previewRow = new Adw.ButtonRow({
             title: 'Pokaż podgląd',
@@ -205,18 +336,18 @@ export default class WyrazPreferences extends ExtensionPreferences {
         const syncLook = () => {
             const style = settings.get_string('background-style');
             styleRow.subtitle = STYLE_NOTES[style] ?? '';
-            fontRow.visible = style === 'aurora' || style === 'ocean';
-            renRow.visible = style === 'lublin';
-            wroRow.visible = style === 'wroclove';
 
-            const fam = settings.get_string('font-family');
-            fontRow.subtitle = missing(fam)
-                ? 'Ta czcionka nie jest zainstalowana, zostanie użyta zastępcza szeryfowa'
-                : 'Hasło i definicja';
-            const ren = settings.get_string('renaissance-font');
-            renRow.subtitle = missing(ren) || missing('Exo 2') ? notInstalled : '';
-            const wf = settings.get_string('wroclove-text-font');
-            wroRow.subtitle = missing(wf) || missing('Crimson Text') ? notInstalled : '';
+            if (style === 'lublin') {
+                const ren = settings.get_string('renaissance-font');
+                variantRow.subtitle = missing(ren) || missing('Exo 2') ? notInstalled : '';
+            } else if (style === 'wroclove') {
+                const wf = settings.get_string('wroclove-text-font');
+                variantRow.subtitle = missing(wf) || missing('Crimson Text') ? notInstalled : '';
+            } else {
+                variantRow.subtitle = missing(settings.get_string('font-family'))
+                    ? 'Ta czcionka nie jest zainstalowana, zostanie użyta zastępcza szeryfowa'
+                    : '';
+            }
         };
         syncLook();
         for (const key of ['background-style', 'font-family', 'renaissance-font', 'wroclove-text-font'])
@@ -225,8 +356,6 @@ export default class WyrazPreferences extends ExtensionPreferences {
         page.add(look);
 
         const saver = new Adw.PreferencesGroup({title: 'Wygaszacz'});
-        saver.add(spinRow(settings, 'idle-minutes', 'Uruchom po bezczynności (minuty)',
-            'Brak ruchu myszy i naciśnięć klawiszy, minimum 1 minuta', 1, 240));
         saver.add(switchRow(settings, 'show-on-lock-screen', 'Pokazuj także na ekranie blokady',
             'Gdy komputer jest zablokowany i nikt go nie używa'));
         saver.add(switchRow(settings, 'respect-inhibitors', 'Nie przeszkadzaj podczas filmów',
@@ -262,8 +391,6 @@ export default class WyrazPreferences extends ExtensionPreferences {
         page.add(saver);
 
         page.add(this._codeGroup(settings, track));
-
-        page.add(this._todayGroup(window, settings, track));
 
         return page;
     }
@@ -365,6 +492,85 @@ export default class WyrazPreferences extends ExtensionPreferences {
         track(settings, settings.connect('changed::unlock-code', syncCode));
         syncCode();
         return code;
+    }
+
+    _archiveGroup(window, track) {
+        const group = new Adw.PreferencesGroup({
+            title: 'Archiwum',
+            description: 'Hasła wyświetlone w ciągu ostatniego roku, od najnowszych.',
+        });
+        let dayRows = [];
+        let refreshId = 0;
+
+        const refresh = () => {
+            for (const r of dayRows)
+                group.remove(r);
+            dayRows = [];
+            const state = readState();
+            const history = Array.isArray(state?.history) ? state.history.slice().reverse() : [];
+            if (!history.length) {
+                const empty = textRow('Archiwum jest puste',
+                    'Hasła trafiają tutaj następnego dnia po wyświetleniu.');
+                group.add(empty);
+                dayRows.push(empty);
+                return;
+            }
+            for (const h of history) {
+                const words = Array.isArray(h.words) ? h.words : [];
+                const day = new Adw.ExpanderRow({
+                    title: esc(polishDay(h.date)),
+                    subtitle: esc(words.map(e => e.w).join(', ')),
+                    subtitle_lines: 1,
+                });
+                let filled = false;
+                day.connect('notify::expanded', () => {
+                    if (filled || !day.expanded)
+                        return;
+                    filled = true;
+                    for (const e of words) {
+                        const row = new Adw.ActionRow({
+                            title: esc(e.w),
+                            subtitle: esc((e.d ?? []).join(' · ')),
+                            subtitle_lines: 3,
+                            activatable: false,
+                        });
+                        row.add_prefix(langBadge(e.lang ?? 'pl'));
+                        day.add_row(row);
+                    }
+                });
+                group.add(day);
+                dayRows.push(day);
+            }
+        };
+        refresh();
+
+        let monitor = null;
+        try {
+            monitor = Gio.File.new_for_path(STATE_PATH)
+                .monitor_file(Gio.FileMonitorFlags.NONE, null);
+        } catch (e) {
+            console.warn(`[Wyraz] Nie można obserwować stanu: ${e.message}`);
+        }
+        if (monitor) {
+            window._archiveMonitor = monitor;
+            track(monitor, monitor.connect('changed', () => {
+                if (refreshId)
+                    GLib.source_remove(refreshId);
+                refreshId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
+                    refreshId = 0;
+                    refresh();
+                    return GLib.SOURCE_REMOVE;
+                });
+            }));
+        }
+        window.connect('close-request', () => {
+            if (refreshId)
+                GLib.source_remove(refreshId);
+            refreshId = 0;
+            monitor?.cancel();
+            return false;
+        });
+        return group;
     }
 
     _todayGroup(window, settings, track) {
@@ -480,7 +686,7 @@ export default class WyrazPreferences extends ExtensionPreferences {
         return group;
     }
 
-    _dictionaryPage(window) {
+    _dictionaryPage(window, settings, track) {
         const page = new Adw.PreferencesPage({
             title: 'Słownik',
             icon_name: 'system-search-symbolic',
@@ -503,6 +709,8 @@ export default class WyrazPreferences extends ExtensionPreferences {
 
         const results = new Adw.PreferencesGroup();
         page.add(results);
+
+        page.add(this._todayGroup(window, settings, track));
         let resultRows = [];
         const clearResults = () => {
             for (const r of resultRows)
@@ -634,6 +842,8 @@ export default class WyrazPreferences extends ExtensionPreferences {
             indexes = null;
             return false;
         });
+        page.add(this._archiveGroup(window, track));
+
         return page;
     }
 
@@ -643,48 +853,64 @@ export default class WyrazPreferences extends ExtensionPreferences {
             icon_name: 'help-about-symbolic',
         });
 
-        const head = new Adw.PreferencesGroup();
-        head.add(textRow(EXTENSION_NAME,
-            `Wersja ${this.metadata['version-name'] ?? ''}, rozszerzenie GNOME Shell 50. ` +
+        const group = new Adw.PreferencesGroup();
+        group.add(textRow(EXTENSION_NAME,
+            `Wersja ${this.metadata['version-name'] ?? ''}, rozszerzenie GNOME Shell 50 i 51. ` +
             'Pokazuje hasła i definicje ze słownika jako wygaszacz ekranu.'));
-        const docs = textRow('Dokumentacja', 'Instrukcja, pytania i odpowiedzi (wiki projektu)');
+
+        const docs = textRow('Dokumentacja', 'Instrukcja, pytania i odpowiedzi (wiki projektu).');
         docs.add_suffix(linkButton(window, DOCS_URL));
-        head.add(docs);
-        const repo = textRow('Kod źródłowy', 'Repozytorium na GitHubie, tam też można zgłaszać błędy');
-        repo.add_suffix(linkButton(window, REPO_URL));
-        head.add(repo);
-        page.add(head);
+        group.add(docs);
 
-        const me = new Adw.PreferencesGroup();
-        const about = new Adw.ExpanderRow({
-            title: 'O mnie',
-            subtitle: `Autor: ${AUTHOR}, licencja ${LICENSE.name}`,
-        });
-        const authorRow = textRow('Autor', `Wtyczkę publikuje ${AUTHOR}. Profil w serwisie LinkedIn.`);
-        authorRow.add_suffix(linkButton(window, AUTHOR_URL));
-        about.add_row(authorRow);
-        const lic = textRow('Licencja', `${LICENSE.title} (EUPL-1.2)`);
+        const lic = textRow('Licencja', `${LICENSE.title} (EUPL-1.2).`);
         lic.add_suffix(linkButton(window, LICENSE.url));
-        about.add_row(lic);
-        about.add_row(textRow('Bez gwarancji',
-            'Wtyczka jest udostępniana „tak jak jest” (as-is), bez jakichkolwiek gwarancji. ' +
-            'Autor nie odpowiada za błędy ani za szkody wynikłe z jej użycia.'));
-        me.add(about);
-        page.add(me);
+        group.add(lic);
 
-        const ai = new Adw.PreferencesGroup();
-        const claude = new Adw.ExpanderRow({
-            title: 'Powstało z pomocą Claude',
-            subtitle: 'Asystent AI firmy Anthropic',
-        });
+        const authorRow = textRow('Autor', `Wtyczkę publikuje ${AUTHOR}.`);
+        authorRow.add_suffix(linkButton(window, AUTHOR_URL));
+        group.add(authorRow);
+
+        const subpages = typeof window.push_subpage === 'function';
+        if (subpages) {
+            const softRow = new Adw.ActionRow({
+                title: 'Oprogramowanie',
+                subtitle: 'Powstało z pomocą Claude, oprogramowanie open source.',
+                activatable: true,
+            });
+            softRow.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
+            softRow.connect('activated', () => {
+                const sub = new Adw.PreferencesPage();
+                for (const g of this._softwareGroups(window))
+                    sub.add(g);
+                const view = new Adw.ToolbarView({content: sub});
+                view.add_top_bar(new Adw.HeaderBar());
+                window.push_subpage(new Adw.NavigationPage({title: 'Oprogramowanie', child: view}));
+            });
+            group.add(softRow);
+        }
+
+        group.add(textRow('Bez gwarancji',
+            'Wtyczka jest udostępniana „tak jak jest” (as-is), bez jakichkolwiek gwarancji. ' +
+            'Autor nie odpowiada za błędy ani za szkody wynikłe z jej użycia. ' +
+            'Wtyczka jest publikowana pod nazwą kodową „Wyraz”, a jej testy prowadzone są ' +
+            'w dystrybucji Fedora Linux.'));
+        page.add(group);
+
+        if (!subpages) {
+            for (const g of this._softwareGroups(window))
+                page.add(g);
+        }
+        return page;
+    }
+
+    _softwareGroups(window) {
+        const ai = new Adw.PreferencesGroup({title: 'Powstało z pomocą Claude'});
         const claudeRow = textRow('Claude (Anthropic)', AI_NOTE);
         claudeRow.add_suffix(linkButton(window, 'https://www.anthropic.com/claude'));
-        claude.add_row(claudeRow);
-        ai.add(claude);
-        page.add(ai);
+        ai.add(claudeRow);
 
         const oss = new Adw.PreferencesGroup({
-            title: 'Oprogramowanie open source',
+            title: 'Open source',
             description: 'Składniki i narzędzia użyte w projekcie wraz z licencjami.',
         });
         for (const {group, items} of COMPONENTS) {
@@ -694,13 +920,13 @@ export default class WyrazPreferences extends ExtensionPreferences {
                 subtitle_lines: 1,
             });
             for (const [name, license, role, url] of items) {
-                const row = textRow(name, `${license} · ${role}`);
+                const desc = `${license} · ${role}`;
+                const row = textRow(name, /[.!?]$/.test(desc) ? desc : `${desc}.`);
                 row.add_suffix(linkButton(window, url));
                 exp.add_row(row);
             }
             oss.add(exp);
         }
-        page.add(oss);
-        return page;
+        return [ai, oss];
     }
 }

@@ -1,7 +1,7 @@
 
-.wyraz-kicker {
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 0.32em;
+.wyraz-credit {
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.06em;
   text-align: center;
 }
 
@@ -56,9 +56,8 @@
   color: #ffffff;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
 }
-.wyraz-lublin .wyraz-kicker {
-  color: #75b94a;
-  letter-spacing: 0.4em;
+.wyraz-lublin .wyraz-credit {
+  color: rgba(255, 255, 255, 0.55);
 }
 .wyraz-lublin .wyraz-rule {
   height: 4px;
@@ -78,9 +77,8 @@
   color: #231f20;
   font-weight: bold;
 }
-.wyraz-wroclove .wyraz-kicker {
-  color: #231f20;
-  letter-spacing: 0.3em;
+.wyraz-wroclove .wyraz-credit {
+  color: rgba(35, 31, 32, 0.7);
 }
 .wyraz-wroclove .wyraz-rule {
   height: 3px;
@@ -92,6 +90,37 @@
 }
 .wyraz-wroclove .wyraz-footer {
   color: rgba(35, 31, 32, 0.65);
+}
+
+.wyraz-clock {
+  color: #ffffff;
+}
+.wyraz-wroclove .wyraz-clock {
+  color: #231f20;
+}
+.wyraz-clock-neon {
+  font-family: "Tilt Neon", sans-serif;
+}
+.wyraz-aurora .wyraz-clock-neon { color: #eafff4; }
+.wyraz-ocean .wyraz-clock-neon { color: #eaf8ff; }
+.wyraz-lublin .wyraz-clock-neon { color: #fff0f0; }
+.wyraz-wroclove .wyraz-clock-neon { color: #c8102e; }
+.wyraz-clock-futhark {
+  font-family: "Wyraz Futhark", sans-serif;
+}
+.wyraz-clock-sanfrancisco {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+.wyraz-clock-sourcesans {
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: 900;
+  font-feature-settings: "tnum";
+}
+.wyraz-clock-garamond {
+  font-family: "EB Garamond", serif;
+  font-feature-settings: "lnum", "tnum";
 }
 
 .wyraz-code-box {

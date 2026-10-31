@@ -10,6 +10,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {createBackground, getStyle} from './backgrounds.js';
 import {CodePrompt} from './codePrompt.js';
 import {formatDefinition} from './selection.js';
+import {PRANK_CREDIT, isAprilFirst, pickProverbs} from './prank.js';
 import {hasCode} from './unlockCode.js';
 
 const FADE_IN_MS = 1400;
@@ -24,11 +25,38 @@ const DAYS = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'pi�
 const MONTHS = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
     'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
 
-function polishDate(now) {
+function polishDate(now, withTime = true) {
     const dt = now ?? GLib.DateTime.new_now_local();
     const day = DAYS[dt.get_day_of_week() % 7];
     const month = MONTHS[dt.get_month() - 1];
-    return `${day}, ${dt.get_day_of_month()} ${month} · ${dt.format('%H:%M')}`;
+    const date = `${day}, ${dt.get_day_of_month()} ${month}`;
+    return withTime ? `${date} · ${dt.format('%H:%M')}` : date;
+}
+
+const CLOCK_SIZES = {small: 0.075, medium: 0.11, large: 0.16, huge: 0.22};
+const CLOCK_MARGIN = 0.06;
+const CLOCK_TOP = 0.08;
+const HEART_GAP = 0.02;
+const DEF_MIN = 0.02;
+const DEF_STEP = 0.92;
+const CLOCK_FADE_MS = 700;
+const CLOCK_MOVE_MS = 320;
+const CLOCK_SAMPLES = [...'0123456789'].map(d => `${d}${d}:${d}${d}`);
+const CLOCK_SCALES = [1, 0.85, 0.72, 0.6, 0.5, 0.42, 0.35];
+const NEON_GLOW = {
+    aurora: 'rgba(110, 255, 190, 0.95)',
+    ocean: 'rgba(90, 200, 255, 0.95)',
+    lublin: 'rgba(230, 30, 41, 0.95)',
+    wroclove: 'rgba(200, 16, 46, 0.85)',
+};
+
+function clockTime(now) {
+    return (now ?? GLib.DateTime.new_now_local()).format('%H:%M');
+}
+
+function isFree(r, rects, m) {
+    return rects.every(o => r.x + r.w + m <= o.x || o.x + o.w + m <= r.x ||
+        r.y + r.h + m <= o.y || o.y + o.h + m <= r.y);
 }
 
 function cssFamily(family, generic = 'serif') {
@@ -37,8 +65,9 @@ function cssFamily(family, generic = 'serif') {
 }
 
 class MonitorView {
-    constructor(monitor, styleName, fonts) {
+    constructor(monitor, styleName, fonts, clock = null) {
         this.monitor = monitor;
+        this._styleName = styleName;
         const scale = St.ThemeContext.get_for_stage(global.stage).scale_factor;
         this._cssW = monitor.width / scale;
         this._cssH = monitor.height / scale;
@@ -59,6 +88,29 @@ class MonitorView {
 
         this._bg = createBackground(styleName, monitor);
         this.actor.add_child(this._bg.actor);
+
+        this._clockCfg = clock;
+        this._clock = null;
+        this._pendingQ = -1;
+        if (clock) {
+            const region = new St.Widget({x_expand: true, y_expand: true});
+            const cls = `wyraz-clock wyraz-clock-${clock.style}`;
+            this._clock = new St.Label({style_class: cls, opacity: 0, text: clockTime()});
+            this._clockProbe = new St.Label({style_class: cls, opacity: 0, text: clockTime()});
+            for (const l of [this._clock, this._clockProbe]) {
+                l.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+                region.add_child(l);
+            }
+            this.actor.add_child(region);
+            this._clockOpacity = Math.round(255 * (1 - clock.transparency / 100));
+            this._clockBox = null;
+            this._runScale = 0;
+            this._clockShown = false;
+            this._clockWaiting = false;
+            this._clockMoveId = 0;
+            this._heartQ = -1;
+            this._reserve = new Map();
+        }
 
         this._blur = null;
         try {
@@ -110,12 +162,6 @@ class MonitorView {
         this._anchor.set_child(this._content);
 
         const H = this._cssH;
-        this._kicker = new St.Label({
-            style_class: 'wyraz-kicker',
-            x_align: Clutter.ActorAlign.CENTER,
-            style: `font-family: ${this._family}; font-size: ${Math.round(H * 0.0175)}px;` +
-                `margin-bottom: ${Math.round(H * 0.018)}px;`,
-        });
         this._word = new St.Label({
             style_class: 'wyraz-word',
             x_align: Clutter.ActorAlign.CENTER,
@@ -141,7 +187,15 @@ class MonitorView {
         ct.ellipsize = Pango.EllipsizeMode.NONE;
         ct.line_alignment = Pango.Alignment.CENTER;
 
-        for (const a of [this._kicker, this._word, this._rule, this._definition]) {
+        this._credit = new St.Label({
+            style_class: 'wyraz-credit',
+            x_align: Clutter.ActorAlign.CENTER,
+            style: `font-family: ${this._family}; font-size: ${Math.round(H * 0.013)}px;` +
+                `margin-top: ${Math.round(H * 0.03)}px;`,
+            visible: false,
+        });
+
+        for (const a of [this._word, this._rule, this._definition, this._credit]) {
             a.opacity = 0;
             this._content.add_child(a);
         }
@@ -154,8 +208,10 @@ class MonitorView {
             y_align: Clutter.ActorAlign.END,
             style: `font-family: ${this._family}; font-size: ${Math.round(H * 0.016)}px;` +
                 `margin-bottom: ${Math.round(H * (this._quadMode ? 0.025 : 0.045))}px;`,
-            text: polishDate(),
+            text: polishDate(null, !clock),
         });
+        this._footer.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this._credit.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         if (this._quadMode) {
             this._quadBox.add_child(this._footer);
         } else {
@@ -166,12 +222,396 @@ class MonitorView {
     setTime(seconds) {
         this._time = seconds;
         this._bg?.setTime(seconds);
-        if (this._quadMode && this._bg)
+        if (this._quadMode && this._bg) {
             this._followRed(this._bg.textQuadrant(seconds));
+            const hq = this._bg.clockQuadrant?.() ?? this._bg.heartQuadrant ?? -1;
+            if (hq !== this._heartQ) {
+                this._heartQ = hq;
+                if (this._clockCfg?.position === 'special')
+                    this._safeLayoutClock(false);
+            }
+        }
     }
 
     _placeQuad(q) {
         this._quadBox.set_position((q % 2) * this._qw, Math.floor(q / 2) * this._qh);
+        this._pendingQ = -1;
+        this._safeLayoutClock(false);
+    }
+
+    _expectQuad(q) {
+        this._pendingQ = q;
+        this._safeLayoutClock(false);
+    }
+
+    _clockPx(scale) {
+        return Math.max(12, Math.round(this._cssH * CLOCK_SIZES[this._clockCfg.size] * scale));
+    }
+
+    _styleClock(label, scale) {
+        const px = this._clockPx(scale);
+        let style = `font-size: ${px}px;`;
+        if (this._clockCfg.style === 'neon') {
+            const glow = NEON_GLOW[this._styleName] ?? NEON_GLOW.aurora;
+            style += ` text-shadow: 0 0 ${Math.max(4, Math.round(px * 0.12))}px ${glow};`;
+        }
+        if (label.style !== style)
+            label.style = style;
+        label.ensure_style();
+        const [ink] = label.clutter_text.get_layout().get_pixel_extents();
+        return {x: ink.x, y: ink.y, w: ink.width, h: ink.height};
+    }
+
+    _clockReserve(scale) {
+        let r = this._reserve.get(scale);
+        if (!r) {
+            let w = 0, top = Infinity, bottom = -Infinity;
+            for (const t of CLOCK_SAMPLES) {
+                this._clockProbe.text = t;
+                const ink = this._styleClock(this._clockProbe, scale);
+                w = Math.max(w, ink.w);
+                top = Math.min(top, ink.y);
+                bottom = Math.max(bottom, ink.y + ink.h);
+            }
+            r = {w, h: bottom - top};
+            this._reserve.set(scale, r);
+        }
+        return r;
+    }
+
+    _footerRect() {
+        const [, fw] = this._footer.get_preferred_width(-1);
+        const [, fh] = this._footer.get_preferred_height(fw);
+        return {x: (this.monitor.width - fw) / 2, y: this.monitor.height - fh, w: fw, h: fh};
+    }
+
+    _occupied() {
+        const qs = new Set();
+        const cur = this._textQ >= 0 ? this._textQ : this._bg?.textQuadrant?.(this._time ?? 0);
+        if (cur >= 0)
+            qs.add(cur);
+        if (this._pendingQ >= 0)
+            qs.add(this._pendingQ);
+        return [...qs].map(q => this._quadRect(q));
+    }
+
+    _quadRect(q) {
+        return {x: (q % 2) * this._qw, y: Math.floor(q / 2) * this._qh, w: this._qw, h: this._qh};
+    }
+
+    _textAllocated() {
+        return [this._content, this._word, this._definition].every(a => a.has_allocation()) &&
+            this._word.clutter_text.has_allocation() && this._definition.clutter_text.has_allocation();
+    }
+
+    _textInk() {
+        const allocated = this._textAllocated();
+        let cw, ch;
+        if (allocated) {
+            const box = this._content.get_allocation_box();
+            cw = box.x2 - box.x1;
+            ch = box.y2 - box.y1;
+        } else {
+            [, cw] = this._content.get_preferred_width(-1);
+            [, ch] = this._content.get_preferred_height(cw);
+        }
+        let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+        const add = (x, y, w, h) => {
+            if (!(w > 0 && h > 0))
+                return;
+            x1 = Math.min(x1, x);
+            y1 = Math.min(y1, y);
+            x2 = Math.max(x2, x + w);
+            y2 = Math.max(y2, y + h);
+        };
+        if (allocated) {
+            for (const child of [this._word, this._rule, this._definition, this._credit]) {
+                if (!child.visible || !child.has_allocation())
+                    continue;
+                const b = child.get_allocation_box();
+                if (child === this._rule) {
+                    add(b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1);
+                    continue;
+                }
+                const ct = child.clutter_text;
+                const cb = ct.get_allocation_box();
+                const [ink] = ct.get_layout().get_pixel_extents();
+                add(b.x1 + cb.x1 + ink.x, b.y1 + cb.y1 + ink.y, ink.width, ink.height);
+            }
+        } else {
+            let y = 0;
+            for (const child of [this._word, this._rule, this._definition, this._credit]) {
+                if (!child.visible)
+                    continue;
+                const [, nw] = child.get_preferred_width(-1);
+                const w = Math.min(nw, cw);
+                const [, nh] = child.get_preferred_height(w);
+                add((cw - w) / 2, y, w, nh);
+                y += nh;
+            }
+        }
+        if (x1 === Infinity)
+            return {x: 0, y: 0, w: cw, h: ch, cw, ch};
+        return {x: x1, y: y1, w: x2 - x1, h: y2 - y1, cw, ch};
+    }
+
+    _textRect(ink, s, tx, ty) {
+        const cx = this.monitor.width / 2 + tx, cy = this.monitor.height / 2 + ty;
+        return {
+            x: cx + (ink.x - ink.cw / 2) * s,
+            y: cy + (ink.y - ink.ch / 2) * s,
+            w: ink.w * s,
+            h: ink.h * s,
+        };
+    }
+
+    _fitText(ink, C, m) {
+        const W = this.monitor.width;
+        const f = this._footerRect();
+        const tx = this._anchor.translation_x, ty = this._anchor.translation_y;
+        const eps = 0.5;
+        const inside = r => r.x >= m - eps && r.x + r.w <= W - m + eps &&
+            r.y >= m - eps && r.y + r.h <= f.y - m + eps;
+        const t = this._textRect(ink, 1, tx, ty);
+        if (isFree(t, [C], m - eps))
+            return {dx: 0, dy: 0};
+        const moves = [
+            {dx: 0, dy: C.y + C.h + m - t.y},
+            {dx: 0, dy: C.y - m - (t.y + t.h)},
+            {dx: C.x + C.w + m - t.x, dy: 0},
+            {dx: C.x - m - (t.x + t.w), dy: 0},
+        ].filter(mv => {
+            const r = {x: t.x + mv.dx, y: t.y + mv.dy, w: t.w, h: t.h};
+            return inside(r) && isFree(r, [C], m - eps);
+        }).sort((a, b) => Math.abs(a.dx) + Math.abs(a.dy) - Math.abs(b.dx) - Math.abs(b.dy));
+        return moves[0] ?? null;
+    }
+
+    _applyTextFit({dx, dy}) {
+        this._anchor.translation_x += Math.sign(dx) * Math.ceil(Math.abs(dx));
+        this._anchor.translation_y += Math.sign(dy) * Math.ceil(Math.abs(dy));
+    }
+
+    _specialRect(res, m) {
+        const W = this.monitor.width, H = this.monitor.height;
+        if (this._quadMode) {
+            const cq = this._bg?.clockQuadrant?.() ?? this._bg?.heartQuadrant ?? -1;
+            const q = cq >= 0 ? cq : 3 - Math.max(0, this._textQ);
+            const col = q % 2, row = Math.floor(q / 2);
+            return {x: col * this._qw + (this._qw - res.w) / 2, y: row * this._qh + (this._qh - res.h) / 2,
+                w: res.w, h: res.h, ax: 0.5, ay: 0.5};
+        }
+        if (this._styleName === 'ocean') {
+            return {x: (W - res.w) / 2, y: Math.round(H * CLOCK_TOP), w: res.w, h: res.h, ax: 0.5, ay: 0};
+        }
+        return {x: (W - res.w) / 2, y: H - res.h, w: res.w, h: res.h, ax: 0.5, ay: 1};
+    }
+
+    _fallbackRect(res, m) {
+        const W = this.monitor.width, H = this.monitor.height;
+        if (this._styleName === 'ocean')
+            return {x: (W - res.w) / 2, y: Math.round(H * CLOCK_TOP), w: res.w, h: res.h, ax: 0.5, ay: 0};
+        const f = this._footerRect();
+        return {x: (W - res.w) / 2, y: f.y - m - res.h, w: res.w, h: res.h, ax: 0.5, ay: 1};
+    }
+
+    _randomRect(res, m, obstacles) {
+        const W = this.monitor.width, H = this.monitor.height;
+        const step = Math.max(8, Math.round(m / 2));
+        const free = [];
+        for (let y = m; y <= H - m - res.h + 0.5; y += step) {
+            for (let x = m; x <= W - m - res.w + 0.5; x += step) {
+                const r = {x, y, w: res.w, h: res.h, ax: 0, ay: 0};
+                if (isFree(r, obstacles, m))
+                    free.push(r);
+            }
+        }
+        if (!free.length)
+            return null;
+        const prev = this._clockBox?.rect;
+        let pool = free;
+        if (prev) {
+            const far = free.filter(r => Math.hypot(r.x - prev.x, r.y - prev.y) > W * 0.2);
+            if (far.length)
+                pool = far;
+        }
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    _safeLayoutClock(fresh) {
+        try {
+            this._layoutClock(fresh);
+        } catch (e) {
+            if (!this._clockError)
+                console.error(`[Wyraz] Zegar: ${e.message}\n${e.stack}`);
+            this._clockError = true;
+        }
+    }
+
+    _layoutClock(fresh) {
+        if (!this._clock || !this._content)
+            return;
+        if (this._clockWaiting && !fresh)
+            return;
+        this._clockWaiting = false;
+        const m = Math.round(this.monitor.height * CLOCK_MARGIN);
+        const random = this._clockCfg.position === 'random';
+        let box = null;
+
+        if (this._clockCfg.position === 'custom') {
+            const res = this._clockReserve(1);
+            const W = this.monitor.width, H = this.monitor.height;
+            const ax = Math.min(100, Math.max(0, this._clockCfg.x ?? 50)) / 100;
+            const ay = Math.min(100, Math.max(0, this._clockCfg.y ?? 50)) / 100;
+            this._moveClock({
+                rect: {x: ax * (W - res.w), y: ay * (H - res.h), w: res.w, h: res.h, ax, ay},
+                scale: 1,
+                how: 'custom',
+            });
+            return;
+        }
+
+        if (!random) {
+            const res = this._clockReserve(1);
+            this._moveClock({rect: this._specialRect(res, m), scale: 1, how: 'special'});
+            return;
+        }
+
+        const scales = this._runScale ? [this._runScale] : CLOCK_SCALES;
+
+        if (this._quadMode) {
+            const taken = this._occupied();
+            if (random && !fresh && this._clockBox && isFree(this._clockBox.rect, taken, m))
+                box = this._clockBox;
+            for (const scale of scales) {
+                if (box)
+                    break;
+                const res = this._clockReserve(scale);
+                const rect = random ? this._randomRect(res, m, taken) : this._specialRect(res, m);
+                if (rect)
+                    box = {rect, scale, how: random ? 'random' : 'special'};
+            }
+        } else {
+            const ink = this._textInk();
+            const text = this._textRect(ink, 1, this._anchor.translation_x, this._anchor.translation_y);
+            const footer = this._footerRect();
+            const attempts = random
+                ? scales.flatMap(sc => [['random', sc], ['special', sc]])
+                : scales.map(sc => ['special', sc]);
+            for (const [how, scale] of attempts) {
+                const res = this._clockReserve(scale);
+                if (how === 'random') {
+                    const rect = this._randomRect(res, m, [text, footer]);
+                    if (rect) {
+                        box = {rect, scale, how};
+                        break;
+                    }
+                } else {
+                    let rect = this._fallbackRect(res, m);
+                    let fit = rect ? this._fitText(ink, rect, m) : null;
+                    if (!fit && rect && this._styleName === 'ocean') {
+                        rect = {...rect, y: m};
+                        fit = this._fitText(ink, rect, m);
+                    }
+                    if (fit) {
+                        this._applyTextFit(fit);
+                        box = {rect, scale, how};
+                        break;
+                    }
+                }
+            }
+        }
+        if (box && !this._runScale)
+            this._runScale = box.scale;
+        this._moveClock(box);
+    }
+
+    _alignClock() {
+        const box = this._clockBox;
+        if (!box || !this._clock)
+            return;
+        const ink = this._styleClock(this._clock, box.scale);
+        const {rect} = box;
+        const y = rect.y + rect.ay * (rect.h - ink.h);
+        let lx;
+        if (rect.ax === 0.5) {
+            const [, natW] = this._clock.get_preferred_width(-1);
+            lx = rect.x + rect.w / 2 - natW / 2;
+        } else {
+            lx = rect.x + rect.ax * (rect.w - ink.w) - ink.x;
+        }
+        this._clock.set_position(Math.round(lx), Math.round(y - ink.y));
+    }
+
+    _fadeClock(opacity, delay = 0, duration = CLOCK_FADE_MS) {
+        this._clockShown = opacity > 0;
+        this._clock.remove_transition('opacity');
+        this._clock.ease({
+            opacity,
+            delay,
+            duration,
+            mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+        });
+    }
+
+    _cancelClockMove() {
+        if (this._clockMoveId) {
+            GLib.source_remove(this._clockMoveId);
+            this._clockMoveId = 0;
+        }
+    }
+
+    _avoidHeart(rect) {
+        if (!this._bg?.setHeartAvoid)
+            return;
+        const m = Math.round(this.monitor.height * HEART_GAP);
+        this._bg.setHeartAvoid(rect
+            ? {x: rect.x - m, y: rect.y - m, w: rect.w + 2 * m, h: rect.h + 2 * m}
+            : null);
+    }
+
+    _moveClock(box) {
+        this._cancelClockMove();
+        if (!box) {
+            this._clockBox = null;
+            this._avoidHeart(null);
+            this._fadeClock(0, 0, 300);
+            return;
+        }
+        this._avoidHeart(box.rect);
+        const old = this._clockBox;
+        const same = old && old.scale === box.scale &&
+            Math.abs(old.rect.x - box.rect.x) < 2 && Math.abs(old.rect.y - box.rect.y) < 2;
+        const place = () => {
+            this._clockBox = box;
+            this._alignClock();
+            this._fadeClock(this._clockOpacity, 250);
+        };
+        if (same && this._clockShown) {
+            this._clockBox = box;
+            this._alignClock();
+            return;
+        }
+        if (!this._clockShown) {
+            place();
+            return;
+        }
+        this._fadeClock(0, 0, 300);
+        this._clockMoveId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, CLOCK_MOVE_MS, () => {
+            this._clockMoveId = 0;
+            if (this._clock)
+                place();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    _hideClock() {
+        if (!this._clock)
+            return;
+        this._clockWaiting = true;
+        this._cancelClockMove();
+        if (this._clockShown)
+            this._fadeClock(0, 0, 500);
     }
 
     _followRed(q) {
@@ -184,6 +624,7 @@ class MonitorView {
             return;
         }
         this._moving = true;
+        this._expectQuad(q);
         this._quadBox.ease({
             opacity: 0,
             duration: 700,
@@ -221,8 +662,17 @@ class MonitorView {
         });
     }
 
-    updateClock(text) {
-        this._footer.text = text;
+    updateClock(footer, time) {
+        if (this._footer.text !== footer)
+            this._footer.text = footer;
+        if (this._clock && this._clock.text !== time) {
+            this._clock.text = time;
+            try {
+                this._alignClock();
+            } catch (e) {
+                console.error(`[Wyraz] Zegar: ${e.message}`);
+            }
+        }
     }
 
     _applyEntry(entry, index, total) {
@@ -247,11 +697,11 @@ class MonitorView {
             defScale = 0.029;
         if (this._quadMode)
             defScale *= 0.82;
-        this._definition.style = `font-family: ${this._family}; font-size: ${Math.round(H * defScale)}px;`;
+        this._setDefinitionPx(Math.round(H * defScale));
         this._definition.text = text;
 
-        const label = entry.lang === 'en' ? 'WORD OF THE DAY' : 'SŁOWO DNIA';
-        this._kicker.text = total > 1 ? `${label}  ·  ${index + 1} / ${total}` : label;
+        this._credit.text = PRANK_CREDIT;
+        this._credit.visible = Boolean(entry.prank);
 
         const m = this.monitor;
         const drift = this._quadMode ? 0.4 : 1;
@@ -260,12 +710,58 @@ class MonitorView {
 
         if (this._quadMode) {
             this._content.set_scale(1, 1);
+            this._shrinkDefinition(this._qh * 0.8);
             const [, natH] = this._content.get_preferred_height(-1);
             const [, natW] = this._content.get_preferred_width(-1);
             const fit = Math.min(1, this._qh * 0.8 / Math.max(natH, 1),
                 this._qw * 0.9 / Math.max(natW, 1));
             this._content.set_scale(fit, fit);
+        } else {
+            this._content.set_scale(1, 1);
         }
+
+        if (this._quadMode)
+            this._safeLayoutClock(true);
+        else
+            this._scheduleLayout();
+    }
+
+    _setDefinitionPx(px) {
+        this._defPx = px;
+        this._definition.style = `font-family: ${this._family}; font-size: ${px}px;`;
+    }
+
+    _shrinkDefinition(maxH) {
+        const min = Math.round(this._cssH * DEF_MIN);
+        const start = this._defPx;
+        let [, cw] = this._content.get_preferred_width(-1);
+        let [, ch] = this._content.get_preferred_height(cw);
+        while (ch > maxH && this._defPx > min) {
+            this._setDefinitionPx(Math.max(min, Math.floor(this._defPx * DEF_STEP)));
+            [, cw] = this._content.get_preferred_width(-1);
+            [, ch] = this._content.get_preferred_height(cw);
+        }
+        return this._defPx !== start;
+    }
+
+    _scheduleLayout() {
+        if (!this._clock)
+            return;
+        if (this._layoutId)
+            GLib.source_remove(this._layoutId);
+        let tries = 0;
+        this._layoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 40, () => {
+            if (!this._content) {
+                this._layoutId = 0;
+                return GLib.SOURCE_REMOVE;
+            }
+            if (!this._textAllocated() && ++tries < 8)
+                return GLib.SOURCE_CONTINUE;
+            this._layoutId = 0;
+            this._safeLayoutClock(true);
+            return GLib.SOURCE_REMOVE;
+        });
+        GLib.Source.set_name_by_id(this._layoutId, '[wyraz] clock layout');
     }
 
     present(entry, index, total, first, interval = 30) {
@@ -284,13 +780,15 @@ class MonitorView {
             this._content.opacity = 255;
             this._content.translation_y = 0;
 
-            this._kicker.opacity = 0;
-            this._kicker.ease({
-                opacity: 170,
-                delay: first ? 600 : 100,
-                duration: WORD_IN_MS,
-                mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-            });
+            this._credit.opacity = 0;
+            if (entry.prank) {
+                this._credit.ease({
+                    opacity: 200,
+                    delay: first ? 1700 : 1200,
+                    duration: WORD_IN_MS,
+                    mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                });
+            }
 
             this._word.opacity = 0;
             this._word.translation_y = lift;
@@ -327,8 +825,11 @@ class MonitorView {
             showNew();
             return;
         }
+        if (this._clockCfg?.position === 'random')
+            this._hideClock();
         if (moveTo >= 0) {
             this._moving = true;
+            this._expectQuad(moveTo);
             this._quadBox.ease({
                 opacity: 0,
                 duration: WORD_OUT_MS,
@@ -361,8 +862,15 @@ class MonitorView {
     }
 
     destroy() {
+        if (this._layoutId) {
+            GLib.source_remove(this._layoutId);
+            this._layoutId = 0;
+        }
+        if (this._clock)
+            this._cancelClockMove();
         this._content = null;
         this._quadBox = null;
+        this._clock = null;
         this._bg?.destroy();
         this._bg = null;
         this.actor.destroy();
@@ -441,6 +949,8 @@ export class Screensaver {
 
         this.codeRequired = this._wantsCode();
         this._current = item;
+        this._prank = isAprilFirst(GLib.DateTime.new_now_local()) ? pickProverbs(3) : [];
+        this._advances = 0;
         try {
             this._build();
             if (!this._startInput()) {
@@ -469,10 +979,16 @@ export class Screensaver {
         });
         GLib.Source.set_name_by_id(this._frameId, '[wyraz] frame');
 
-        this._clockId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 5, () => {
-            const text = polishDate();
-            for (const v of this._views)
-                v.updateClock(text);
+        this._clockId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
+            const now = GLib.DateTime.new_now_local();
+            const footer = polishDate(now, !this._clockOn);
+            const time = clockTime(now);
+            try {
+                for (const v of this._views)
+                    v.updateClock(footer, time);
+            } catch (e) {
+                console.error(`[Wyraz] Zegar: ${e.message}`);
+            }
             return GLib.SOURCE_CONTINUE;
         });
         GLib.Source.set_name_by_id(this._clockId, '[wyraz] clock');
@@ -482,7 +998,11 @@ export class Screensaver {
             duration: FADE_IN_MS,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
         });
-        this._present(item, true);
+        try {
+            this._present(item, true);
+        } catch (e) {
+            console.error(`[Wyraz] Pierwsze hasło: ${e.message}\n${e.stack}`);
+        }
 
         const interval = Math.max(5, this._settings.get_int('change-interval'));
         this._advanceId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, interval, () => {
@@ -522,8 +1042,18 @@ export class Screensaver {
                 : style.textFont ?? userFont,
         };
 
+        const clock = this._settings.get_boolean('clock-enabled') ? {
+            transparency: this._settings.get_int('clock-transparency'),
+            size: this._settings.get_string('clock-size'),
+            position: this._settings.get_string('clock-position'),
+            x: this._settings.get_int('clock-x'),
+            y: this._settings.get_int('clock-y'),
+            style: this._settings.get_string('clock-style'),
+        } : null;
+        this._clockOn = clock !== null;
+
         for (const monitor of Main.layoutManager.monitors) {
-            const view = new MonitorView(monitor, styleName, fonts);
+            const view = new MonitorView(monitor, styleName, fonts, clock);
             this._root.add_child(view.actor);
             this._views.push(view);
         }
@@ -666,6 +1196,13 @@ export class Screensaver {
         if (!this._root)
             return;
         const token = this._showToken;
+        this._advances = (this._advances ?? 0) + 1;
+        if (this._prank?.length && this._advances % 2 === 0) {
+            const p = this._prank.shift();
+            this._current = {entry: {w: p.text, d: [p.meaning], prank: true}, index: 0, total: 1};
+            this._present(this._current, false);
+            return;
+        }
         let item = null;
         try {
             item = await this._store.next(this._counts());

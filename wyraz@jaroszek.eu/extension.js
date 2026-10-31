@@ -152,18 +152,26 @@ export default class WyrazExtension extends Extension {
 
     _startPreview() {
         this._stopPreview();
-        if (Main.sessionMode.isLocked || !this._screensaver || this._screensaver.visible)
+        if (Main.sessionMode.isLocked || !this._screensaver) {
+            console.warn('[Wyraz] Podgląd: ekran zablokowany albo wygaszacz nieaktywny');
             return;
+        }
+        if (this._screensaver.visible) {
+            console.warn('[Wyraz] Podgląd: wygaszacz już działa');
+            return;
+        }
+        console.log('[Wyraz] Podgląd: czekam, aż mysz się zatrzyma');
         const started = GLib.get_monotonic_time();
         this._previewId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
             if ((GLib.get_monotonic_time() - started) / 1000 > PREVIEW_TIMEOUT_MS) {
+                console.warn('[Wyraz] Podgląd: mysz się nie zatrzymała, rezygnuję');
                 this._previewId = 0;
                 return GLib.SOURCE_REMOVE;
             }
             if (this._idleMonitor.get_idletime() < PREVIEW_IDLE_MS)
                 return GLib.SOURCE_CONTINUE;
             this._previewId = 0;
-            this._screensaver?.show().catch(e => console.error(`[Wyraz] ${e.message}`));
+            this._screensaver?.show().catch(e => console.error(`[Wyraz] ${e.message}\n${e.stack}`));
             return GLib.SOURCE_REMOVE;
         });
         GLib.Source.set_name_by_id(this._previewId, '[wyraz] preview');

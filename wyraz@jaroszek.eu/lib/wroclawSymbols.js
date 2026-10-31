@@ -92,3 +92,36 @@ export class WroclawSymbols {
         return gridLayout(t - this.wordStart, this.interval);
     }
 }
+
+export function freeHeartSpot({u, v, x0, y0, qw, qh, radius, avoid}) {
+    const rects = (Array.isArray(avoid) ? avoid : [avoid]).filter(Boolean);
+    if (!rects.length)
+        return {u, v, scale: 1};
+    const clear = (uu, vv, r) => {
+        const cx = x0 + uu * qw, cy = y0 + vv * qh;
+        return rects.every(a => {
+            const dx = Math.max(a.x - cx, 0, cx - (a.x + a.w));
+            const dy = Math.max(a.y - cy, 0, cy - (a.y + a.h));
+            return Math.hypot(dx, dy) >= r;
+        });
+    };
+    if (clear(u, v, radius))
+        return {u, v, scale: 1};
+    for (const scale of [1, 0.85, 0.7, 0.55]) {
+        const r = radius * scale;
+        const u0 = Math.min(0.5, r / qw), v0 = Math.min(0.5, r / qh);
+        let best = null, bestD = Infinity;
+        for (let vv = v0; vv <= 1 - v0 + 1e-9; vv += 0.02) {
+            for (let uu = u0; uu <= 1 - u0 + 1e-9; uu += 0.02) {
+                const d = Math.hypot((uu - u) * qw, (vv - v) * qh);
+                if (d < bestD && clear(uu, vv, r)) {
+                    best = {u: uu, v: vv, scale};
+                    bestD = d;
+                }
+            }
+        }
+        if (best)
+            return best;
+    }
+    return null;
+}

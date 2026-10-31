@@ -1,58 +1,38 @@
-import Cogl from 'gi://Cogl';
-import GObject from 'gi://GObject';
-import Shell from 'gi://Shell';
 import St from 'gi://St';
 
 import {LublinBackground} from './lublinBackground.js';
+import {ShaderEffect} from './shaderEffect.js';
 import {WroclawBackground} from './wroclawBackground.js';
 
 import {AURORA_CODE, COMMON_DECLARATIONS, OCEAN_CODE} from './shaders.js';
 
-const BackgroundEffectBase = GObject.registerClass({
-    GTypeFlags: GObject.TypeFlags.ABSTRACT,
-}, class BackgroundEffectBase extends Shell.GLSLEffect {
-    _init(params = {}) {
-        super._init();
-        this._timeLoc = this.get_uniform_location('time');
-        this._resLoc = this.get_uniform_location('resolution');
-        this._originLoc = this.get_uniform_location('origin');
-        this._darkenLoc = this.get_uniform_location('darken');
+class BackgroundEffect {
+    constructor(key, code, params = {}) {
+        this._shader = new ShaderEffect(key, COMMON_DECLARATIONS, code);
+        this.effect = this._shader.effect;
         this.setGeometry(params.width ?? 1920, params.height ?? 1080,
             params.x ?? 0, params.y ?? 0);
         this.setDarken(params.darken ?? 0.3);
-        this.set_uniform_float(this._timeLoc, 1, [0]);
+        this._shader.setFloat('time', [0]);
     }
 
     setGeometry(width, height, x, y) {
-        this.set_uniform_float(this._resLoc, 2, [Math.max(width, 1), Math.max(height, 1)]);
-        this.set_uniform_float(this._originLoc, 2, [x, y]);
+        this._shader.setFloat('resolution', [Math.max(width, 1), Math.max(height, 1)]);
+        this._shader.setFloat('origin', [x, y]);
     }
 
     setDarken(value) {
-        this.set_uniform_float(this._darkenLoc, 1, [value]);
+        this._shader.setFloat('darken', [value]);
     }
 
     setTime(seconds) {
-        this.set_uniform_float(this._timeLoc, 1, [seconds]);
-        this.queue_repaint();
+        this._shader.setFloat('time', [seconds]);
+        this._shader.queueRepaint();
     }
-});
+}
 
-const AuroraEffect = GObject.registerClass(
-class AuroraEffect extends BackgroundEffectBase {
-    vfunc_build_pipeline() {
-        this.add_glsl_snippet(Cogl.SnippetHook.FRAGMENT,
-            COMMON_DECLARATIONS, AURORA_CODE, true);
-    }
-});
-
-const OceanEffect = GObject.registerClass(
-class OceanEffect extends BackgroundEffectBase {
-    vfunc_build_pipeline() {
-        this.add_glsl_snippet(Cogl.SnippetHook.FRAGMENT,
-            COMMON_DECLARATIONS, OCEAN_CODE, true);
-    }
-});
+const AuroraEffect = params => new BackgroundEffect('Aurora', AURORA_CODE, params);
+const OceanEffect = params => new BackgroundEffect('Ocean', OCEAN_CODE, params);
 
 class ShaderBackground {
     constructor(style, monitor) {
@@ -63,14 +43,14 @@ class ShaderBackground {
         });
         this._effect = null;
         try {
-            this._effect = new style.effect({
+            this._effect = style.effect({
                 width: monitor.width,
                 height: monitor.height,
                 x: monitor.x,
                 y: monitor.y,
                 darken: 0.32,
             });
-            this.actor.add_effect(this._effect);
+            this.actor.add_effect(this._effect.effect);
         } catch (e) {
             console.warn(`[Wyraz] Shader niedostępny, używam gradientu: ${e.message}`);
             this.actor.style = style.fallback;

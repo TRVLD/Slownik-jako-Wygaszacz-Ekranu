@@ -144,9 +144,35 @@ export function formatDefinition(meanings, maxMeanings = 3, maxChars = 200) {
 
 export const LANGS = ['pl', 'en'];
 export const MULTI_VERSION = 2;
+export const HISTORY_DAYS = 366;
+
+function dayNumber(key) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key ?? '');
+    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) / 86400000 : NaN;
+}
+
+export function addToHistory(history, date, words, now = date) {
+    let out = (history ?? []).map(h => ({date: h.date, words: h.words.slice()}));
+    if (date && words?.length) {
+        let day = out.find(h => h.date === date);
+        if (!day) {
+            day = {date, words: []};
+            out.push(day);
+        }
+        for (const e of words) {
+            if (!day.words.some(x => x.w === e.w && x.lang === e.lang))
+                day.words.push({w: e.w, d: (e.d ?? []).slice(0, 3), lang: e.lang ?? 'pl'});
+        }
+    }
+    const limit = dayNumber(now) - HISTORY_DAYS;
+    if (!Number.isNaN(limit))
+        out = out.filter(h => dayNumber(h.date) >= limit);
+    out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    return out;
+}
 
 export function normalizeMulti(raw) {
-    const state = {version: MULTI_VERSION, date: '', today: [], cursor: 0, used: {}, counts: null};
+    const state = {version: MULTI_VERSION, date: '', today: [], cursor: 0, used: {}, counts: null, history: []};
     for (const l of LANGS)
         state.used[l] = [];
     if (!raw || typeof raw !== 'object')
@@ -165,6 +191,17 @@ export function normalizeMulti(raw) {
             if (Array.isArray(raw.used[l]))
                 state.used[l] = raw.used[l].filter(w => typeof w === 'string');
         }
+    }
+    if (Array.isArray(raw.history)) {
+        state.history = raw.history
+            .filter(h => h && typeof h.date === 'string' && Array.isArray(h.words))
+            .map(h => ({
+                date: h.date,
+                words: h.words
+                    .filter(e => e && typeof e.w === 'string')
+                    .map(e => ({w: e.w, d: Array.isArray(e.d) ? e.d : [],
+                        lang: LANGS.includes(e.lang) ? e.lang : 'pl'})),
+            }));
     }
     if (Array.isArray(raw.today)) {
         state.today = raw.today
@@ -210,6 +247,9 @@ export function planDayMulti(state, today, counts, dbs, rng = Math.random) {
         cursor: sameDay ? state.cursor : 0,
         used: {},
         counts: Object.fromEntries(LANGS.map(l => [l, counts[l] ?? 0])),
+        history: sameDay
+            ? addToHistory(state.history, '', [], today)
+            : addToHistory(state.history, state.date, state.today, today),
     };
     const lists = {};
     for (const l of LANGS) {
@@ -244,5 +284,9 @@ export function planDayMulti(state, today, counts, dbs, rng = Math.random) {
 }
 
 export function resetToday(state) {
-    return {...state, date: '', today: [], cursor: 0, counts: null};
+    return {
+        ...state,
+        history: addToHistory(state.history, state.date, state.today),
+        date: '', today: [], cursor: 0, counts: null,
+    };
 }
