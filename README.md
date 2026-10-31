@@ -87,7 +87,7 @@ Okno ustawień ma trzy karty. **Ustawienia** zawiera grupy w kolejności:
 | | Angielskie hasła dziennie | 0 | Ile haseł z Wordset losować na każdy dzień (0–100) |
 | | Zmiana hasła co | 30 s | Jak długo jedno hasło jest na ekranie (5–3600 s) |
 | Wygląd | Styl | Aurora Borealis | albo Blue Ocean, Lublin Renesans, Wroclove Herbowy |
-| | Krój pisma / Pismo haseł / Krój definicji | zależnie od stylu | widoczny tylko wybór pasujący do stylu |
+| | Wariant | zależnie od stylu | widoczny tylko wybór pasujący do stylu |
 | | Pokaż podgląd | | uruchamia wygaszacz na próbę |
 | Wygaszacz | Uruchom po bezczynności | 3 min | Brak ruchu myszy i klawiatury, minimum 1 minuta |
 | | Pokazuj także na ekranie blokady | tak | Przykrywa ekran blokady, gdy nikt nie używa komputera |
