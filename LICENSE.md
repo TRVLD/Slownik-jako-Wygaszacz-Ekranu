@@ -3,8 +3,8 @@ Copyright (c) 2026 Mariusz T. Jaroszek
 
 Licencja: Licencja Publiczna Unii Europejskiej (EUPL) v. 1.2
 SPDX-License-Identifier: EUPL-1.2
-Polska wersja językowa: https://eupl.eu/1.2/pl/
-Wszystkie wersje językowe EUPL są równoważne; poniżej oficjalny tekst angielski.
+Angielska wersja językowa: https://eupl.eu/1.2/en/
+Wszystkie wersje językowe EUPL są równoważne; poniżej oficjalny tekst po polsku.
 
 Oprogramowanie jest udostępniane „tak jak jest” (as-is), bez jakichkolwiek
 gwarancji. Autor nie odpowiada za błędy ani za szkody wynikłe z jego użycia.
@@ -14,193 +14,159 @@ licencje, opisane w fonts/licencje/ oraz w README.md.
 
 ------------------------------------------------------------------------------
 
-EUROPEAN UNION PUBLIC LICENCE v. 1.2
-EUPL © the European Union 2007, 2016
+LICENCJA PUBLICZNA UNII EUROPEJSKIEJ wersja 1.2
 
-This European Union Public Licence (the ‘EUPL’) applies to the Work (as defined below) which is provided under the
-terms of this Licence. Any use of the Work, other than as authorised under this Licence is prohibited (to the extent such
-use is covered by a right of the copyright holder of the Work).
-The Work is provided under the terms of this Licence when the Licensor (as defined below) has placed the following
-notice immediately following the copyright notice for the Work:
-                          Licensed under the EUPL
-or has expressed by any other means his willingness to license under the EUPL.
+EUPL © Unia Europejska 2007, 2016
 
-1.Definitions
-In this Licence, the following terms have the following meaning:
-— ‘The Licence’:this Licence.
-— ‘The Original Work’:the work or software distributed or communicated by the Licensor under this Licence, available
-as Source Code and also as Executable Code as the case may be.
-— ‘Derivative Works’:the works or software that could be created by the Licensee, based upon the Original Work or
-modifications thereof. This Licence does not define the extent of modification or dependence on the Original Work
-required in order to classify a work as a Derivative Work; this extent is determined by copyright law applicable in
-the country mentioned in Article 15.
-— ‘The Work’:the Original Work or its Derivative Works.
-— ‘The Source Code’:the human-readable form of the Work which is the most convenient for people to study and
-modify.
-— ‘The Executable Code’:any code which has generally been compiled and which is meant to be interpreted by
-a computer as a program.
-— ‘The Licensor’:the natural or legal person that distributes or communicates the Work under the Licence.
-— ‘Contributor(s)’:any natural or legal person who modifies the Work under the Licence, or otherwise contributes to
-the creation of a Derivative Work.
-— ‘The Licensee’ or ‘You’:any natural or legal person who makes any usage of the Work under the terms of the
-Licence.
-— ‘Distribution’ or ‘Communication’:any act of selling, giving, lending, renting, distributing, communicating,
-transmitting, or otherwise making available, online or offline, copies of the Work or providing access to its essential
-functionalities at the disposal of any other natural or legal person.
+Niniejsza licencja publiczna Unii Europejskiej („EUPL”) stosowana jest w odniesieniu do utworu (w rozumieniu definicji poniżej) udostępnianego na warunkach niniejszej licencji. Każde wykorzystanie utworu inne niż dozwolone na mocy niniejszej licencji jest zakazane (w zakresie, w jakim takie wykorzystanie wchodzi w zakres prawa przysługującego posiadaczowi praw autorskich do utworu).
 
-2.Scope of the rights granted by the Licence
-The Licensor hereby grants You a worldwide, royalty-free, non-exclusive, sublicensable licence to do the following, for
-the duration of copyright vested in the Original Work:
-— use the Work in any circumstance and for all usage,
-— reproduce the Work,
-— modify the Work, and make Derivative Works based upon the Work,
-— communicate to the public, including the right to make available or display the Work or copies thereof to the public
-and perform publicly, as the case may be, the Work,
-— distribute the Work or copies thereof,
-— lend and rent the Work or copies thereof,
-— sublicense rights in the Work or copies thereof.
-Those rights can be exercised on any media, supports and formats, whether now known or later invented, as far as the
-applicable law permits so.
-In the countries where moral rights apply, the Licensor waives his right to exercise his moral right to the extent allowed
-by law in order to make effective the licence of the economic rights here above listed.
-The Licensor grants to the Licensee royalty-free, non-exclusive usage rights to any patents held by the Licensor, to the
-extent necessary to make use of the rights granted on the Work under this Licence.
+Utwór jest udostępniany na warunkach niniejszej licencji, jeżeli licencjodawca (w rozumieniu definicji poniżej) umieści następującą wzmiankę bezpośrednio po informacji o prawach autorskich do utworu:
 
-3.Communication of the Source Code
-The Licensor may provide the Work either in its Source Code form, or as Executable Code. If the Work is provided as
-Executable Code, the Licensor provides in addition a machine-readable copy of the Source Code of the Work along with
-each copy of the Work that the Licensor distributes or indicates, in a notice following the copyright notice attached to
-the Work, a repository where the Source Code is easily and freely accessible for as long as the Licensor continues to
-distribute or communicate the Work.
+Na licencji EUPL
 
-4.Limitations on copyright
-Nothing in this Licence is intended to deprive the Licensee of the benefits from any exception or limitation to the
-exclusive rights of the rights owners in the Work, of the exhaustion of those rights or of other applicable limitations
-thereto.
+lub w jakikolwiek inny sposób wyrazi swój zamiar udzielenia licencji na podstawie EUPL.
+1. Definicje
 
-5.Obligations of the Licensee
-The grant of the rights mentioned above is subject to some restrictions and obligations imposed on the Licensee. Those
-obligations are the following:
+W niniejszej licencji stosuje się następujące definicje:
 
-Attribution right: The Licensee shall keep intact all copyright, patent or trademarks notices and all notices that refer to
-the Licence and to the disclaimer of warranties. The Licensee must include a copy of such notices and a copy of the
-Licence with every copy of the Work he/she distributes or communicates. The Licensee must cause any Derivative Work
-to carry prominent notices stating that the Work has been modified and the date of modification.
+— licencja: niniejsza licencja,
 
-Copyleft clause: If the Licensee distributes or communicates copies of the Original Works or Derivative Works, this
-Distribution or Communication will be done under the terms of this Licence or of a later version of this Licence unless
-the Original Work is expressly distributed only under this version of the Licence — for example by communicating
-‘EUPL v. 1.2 only’. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the
-Work or Derivative Work that alter or restrict the terms of the Licence.
+— utwór oryginalny: utwór lub oprogramowanie rozpowszechniane lub udostępniane przez licencjodawcę na podstawie niniejszej licencji, dostępne w postaci kodu źródłowego, a także – stosownie do przypadku – kodu wykonywalnego,
 
-Compatibility clause: If the Licensee Distributes or Communicates Derivative Works or copies thereof based upon both
-the Work and another work licensed under a Compatible Licence, this Distribution or Communication can be done
-under the terms of this Compatible Licence. For the sake of this clause, ‘Compatible Licence’ refers to the licences listed
-in the appendix attached to this Licence. Should the Licensee's obligations under the Compatible Licence conflict with
-his/her obligations under this Licence, the obligations of the Compatible Licence shall prevail.
+— utwory zależne: utwory lub oprogramowanie, które mogą zostać opracowane przez licencjobiorcę na podstawie utworu oryginalnego lub modyfikacji utworu oryginalnego. Niniejsza licencja nie określa zakresu modyfikacji lub zależności od utworu oryginalnego, wymaganego dla sklasyfikowania utworu jako utworu zależnego; zakres taki wynika z przepisów prawa autorskiego obowiązującego w państwie, o którym mowa w pkt 15,
 
-Provision of Source Code: When distributing or communicating copies of the Work, the Licensee will provide
-a machine-readable copy of the Source Code or indicate a repository where this Source will be easily and freely available
-for as long as the Licensee continues to distribute or communicate the Work.
-Legal Protection: This Licence does not grant permission to use the trade names, trademarks, service marks, or names
-of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and
-reproducing the content of the copyright notice.
+— „utwór”: utwór oryginalny lub związane z nim utwory zależne,
 
-6.Chain of Authorship
-The original Licensor warrants that the copyright in the Original Work granted hereunder is owned by him/her or
-licensed to him/her and that he/she has the power and authority to grant the Licence.
-Each Contributor warrants that the copyright in the modifications he/she brings to the Work are owned by him/her or
-licensed to him/her and that he/she has the power and authority to grant the Licence.
-Each time You accept the Licence, the original Licensor and subsequent Contributors grant You a licence to their contributions
-to the Work, under the terms of this Licence.
+— „kod źródłowy”: postać utworu czytelna dla człowieka, najdogodniejsza do analizy i modyfikacji,
 
-7.Disclaimer of Warranty
-The Work is a work in progress, which is continuously improved by numerous Contributors. It is not a finished work
-and may therefore contain defects or ‘bugs’ inherent to this type of development.
-For the above reason, the Work is provided under the Licence on an ‘as is’ basis and without warranties of any kind
-concerning the Work, including without limitation merchantability, fitness for a particular purpose, absence of defects or
-errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this
-Licence.
-This disclaimer of warranty is an essential part of the Licence and a condition for the grant of any rights to the Work.
+— „kod wykonywalny”: każdy kod, który został zasadniczo skompilowany i który jako program przeznaczony jest do interpretacji przez komputer,
 
-8.Disclaimer of Liability
-Except in the cases of wilful misconduct or damages directly caused to natural persons, the Licensor will in no event be
-liable for any direct or indirect, material or moral, damages of any kind, arising out of the Licence or of the use of the
-Work, including without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss
-of data or any commercial damage, even if the Licensor has been advised of the possibility of such damage. However,
-the Licensor will be liable under statutory product liability laws as far such laws apply to the Work.
+— „licencjodawca”: osoba fizyczna bądź prawna, która rozpowszechnia lub udostępnia utwór na podstawie licencji,
 
-9.Additional agreements
-While distributing the Work, You may choose to conclude an additional agreement, defining obligations or services
-consistent with this Licence. However, if accepting obligations, You may act only on your own behalf and on your sole
-responsibility, not on behalf of the original Licensor or any other Contributor, and only if You agree to indemnify,
-defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by
-the fact You have accepted any warranty or additional liability.
+— „współautor (współautorzy)”: każda osoba fizyczna lub prawna, która modyfikuje utwór na podstawie licencji lub w inny sposób przyczynia się do stworzenia utworu zależnego,
 
-10.Acceptance of the Licence
-The provisions of this Licence can be accepted by clicking on an icon ‘I agree’ placed under the bottom of a window
-displaying the text of this Licence or by affirming consent in any other similar way, in accordance with the rules of
-applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this Licence and all of its terms
-and conditions.
-Similarly, you irrevocably accept this Licence and all of its terms and conditions by exercising any rights granted to You
-by Article 2 of this Licence, such as the use of the Work, the creation by You of a Derivative Work or the Distribution
-or Communication by You of the Work or copies thereof.
+— „licencjobiorca”: każda osoba fizyczna lub prawna, która w jakimkolwiek zakresie korzysta z utworu na warunkach licencji,
 
-11.Information to the public
-In case of any Distribution or Communication of the Work by means of electronic communication by You (for example,
-by offering to download the Work from a remote location) the distribution channel or media (for example, a website)
-must at least provide to the public the information requested by the applicable law regarding the Licensor, the Licence
-and the way it may be accessible, concluded, stored and reproduced by the Licensee.
+— „rozpowszechnianie” lub „udostępnianie”: każdy przypadek sprzedaży, przekazania, wypożyczenia, najmu, rozpow­ szechnienia, udostępnienia, nadania lub innego oddania kopii utworu do dyspozycji innej osobie fizycznej bądź prawnej lub zapewnienia im dostępu do jego istotnych funkcji w trybie on-line lub off-line.
+2. Zakres praw przyznawanych na mocy licencji
 
-12.Termination of the Licence
-The Licence and the rights granted hereunder will terminate automatically upon any breach by the Licensee of the terms
-of the Licence.
-Such a termination will not terminate the licences of any person who has received the Work from the Licensee under
-the Licence, provided such persons remain in full compliance with the Licence.
+Licencjodawca niniejszym udziela licencjobiorcy obowiązującej na całym świecie, bezpłatnej, niewyłącznej licencji, obejmującej prawo do udzielania dalszych licencji, na wykonywanie następujących czynności przez okres obowiązywania praw autorskich do utworu oryginalnego:
 
-13.Miscellaneous
-Without prejudice of Article 9 above, the Licence represents the complete agreement between the Parties as to the
-Work.
-If any provision of the Licence is invalid or unenforceable under applicable law, this will not affect the validity or
-enforceability of the Licence as a whole. Such provision will be construed or reformed so as necessary to make it valid
-and enforceable.
-The European Commission may publish other linguistic versions or new versions of this Licence or updated versions of
-the Appendix, so far this is required and reasonable, without reducing the scope of the rights granted by the Licence.
-New versions of the Licence will be published with a unique version number.
-All linguistic versions of this Licence, approved by the European Commission, have identical value. Parties can take
-advantage of the linguistic version of their choice.
+— korzystanie z utworu we wszelkich okolicznościach i do wszelkich celów,
 
-14.Jurisdiction
-Without prejudice to specific agreement between parties,
-— any litigation resulting from the interpretation of this License, arising between the European Union institutions,
-bodies, offices or agencies, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice
-of the European Union, as laid down in article 272 of the Treaty on the Functioning of the European Union,
-— any litigation arising between other parties and resulting from the interpretation of this License, will be subject to
-the exclusive jurisdiction of the competent court where the Licensor resides or conducts its primary business.
+— zwielokrotnianie utworu,
 
-15.Applicable Law
-Without prejudice to specific agreement between parties,
-— this Licence shall be governed by the law of the European Union Member State where the Licensor has his seat,
-resides or has his registered office,
-— this licence shall be governed by Belgian law if the Licensor has no seat, residence or registered office inside
-a European Union Member State.
+— modyfikacja utworu oryginalnego oraz opracowywanie utworów zależnych na podstawie utworu,
 
+— publiczne udostępnianie, w tym, stosownie do przypadku, prawo do publicznego udostępniania lub prezentacji utworu lub jego kopii oraz publicznego wykonywania utworu,
 
-                                                         Appendix
+— rozpowszechnianie utworu lub jego kopii,
 
-‘Compatible Licences’ according to Article 5 EUPL are:
-— GNU General Public License (GPL) v. 2, v. 3
-— GNU Affero General Public License (AGPL) v. 3
-— Open Software License (OSL) v. 2.1, v. 3.0
-— Eclipse Public License (EPL) v. 1.0
-— CeCILL v. 2.0, v. 2.1
-— Mozilla Public Licence (MPL) v. 2
-— GNU Lesser General Public Licence (LGPL) v. 2.1, v. 3
-— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) for works other than software
-— European Union Public Licence (EUPL) v. 1.1, v. 1.2
-— Québec Free and Open-Source Licence — Reciprocity (LiLiQ-R) or Strong Reciprocity (LiLiQ-R+).
+— wypożyczanie i najem utworu lub jego kopii,
 
-The European Commission may update this Appendix to later versions of the above licences without producing
-a new version of the EUPL, as long as they provide the rights granted in Article 2 of this Licence and protect the
-covered Source Code from exclusive appropriation.
-All other changes or additions to this Appendix require the production of a new EUPL version.
+— sublicencjonowanie praw do utworu lub jego kopii.
+
+Powyższe prawa mogą być wykonywane bez względu na nośnik, rodzaj wsparcia i format, znany obecnie lub opracowany w przyszłości, w zakresie dozwolonym przepisami obowiązującego prawa.
+
+W państwach, w których przysługują autorskie prawa osobiste, licencjodawca zrzeka się przysługującego mu uprawnienia do wykonywania swoich autorskich praw osobistych w zakresie dozwolonym obowiązującymi przepisami w celu umożliwienia skutecznego udzielenia licencji w zakresie autorskich praw majątkowych wyszczególnionych powyżej.
+
+Licencjodawca niniejszym przyznaje licencjobiorcy bezpłatne, niewyłączne prawa do eksploatacji wszelkich patentów posiadanych przez licencjodawcę w zakresie niezbędnym do korzystania z praw do utworu przyznanych na mocy niniejszej licencji.
+3. Udostępnienie kodu źródłowego
+
+Licencjodawca może udostępnić utwór w postaci kodu źródłowego lub kodu wykonywalnego. Jeżeli utwór udostępnia się w postaci kodu wykonywalnego, licencjodawca udostępnia jednocześnie kopię kodu źródłowego utworu w formie przeznaczonej do odczytu maszynowego wraz z każdą kopią utworu, którą licencjodawca rozpowszechnia, bądź wskazuje, w adnotacji następującej po informacji o prawach autorskich dołączonej do utworu, repozytorium, w którym łatwo i bezpłatnie dostępny jest kod źródłowy w czasie, w którym licencjodawca rozpowszechnia lub udostępnia utwór.
+4. Ograniczenia praw autorskich
+
+Żadne z postanowień niniejszej licencji nie ma na celu pozbawienia licencjobiorcy korzyści wynikających z wszelkich wyjątków lub ograniczeń w stosunku do wyłącznych praw przysługujących właścicielom praw do utworu, ani korzyści płynących z faktu wyczerpania powyższych praw lub innych stosownych ograniczeń tych praw.
+5. Obowiązki licencjobiorcy
+
+Przyznanie praw, o których mowa powyżej, podlega określonym ograniczeniom i obowiązkom nałożonym na licencjo­ biorcę. Obowiązki te obejmują:
+
+    Prawo do autorstwa utworu: Licencjobiorca zobowiązuje się pozostawić w niezmienionej formie wszelkie informacje o prawach autorskich, patentach lub znakach towarowych oraz wszelkie adnotacje dotyczące licencji i wyłączenia gwarancji. Licencjobiorca zobowiązany jest dołączać kopię takich informacji i adnotacji oraz kopię licencji do każdej kopii utworu przez niego rozpowszechnianej lub udostępnianej. Licencjobiorca musi zadbać o to, aby wszelkie utwory zależne opatrzone zostały w widocznym miejscu informacją, że utwór uległ modyfikacji, wraz z datą takiej modyfikacji.
+    Klauzula zakazu wprowadzania zmian i ograniczeń do licencji („copyleft”): Jeżeli licencjobiorca rozpowszechnia lub udostępnia kopie utworów oryginalnych lub utworów zależnych, takie rozpowszechnianie lub udostępnianie musi odbywać się na warunkach niniejszej licencji lub późniejszej wersji niniejszej licencji, chyba że rozpowszechnianie utworu oryginalnego wyraźnie odbywa się wyłącznie na podstawie niniejszej wersji licencji – na przykład poprzez dodanie zastrzeżenia „wyłącznie na podstawie EUPL wersja 1.2”. Licencjobiorca (działając w charakterze licencjodawcy) nie może oferować ani nakładać na utwór ani na utwór zależny żadnych dodatkowych postanowień ani warunków zmieniających bądź ograniczających warunki licencji.
+    Klauzula zgodności: Jeżeli licencjobiorca rozpowszechnia lub udostępnia utwory zależne lub ich kopie opracowane na podstawie utworu i innego utworu licencjonowanego na mocy zgodnej licencji, takie rozpowszechnianie lub udostęp­ nianie może odbywać się na warunkach wspomnianej zgodnej licencji. Do celów niniejszej klauzuli termin „zgodna licencja” obejmuje licencje wymienione w załączniku do niniejszej licencji. Jeżeli obowiązki licencjobiorcy wynikające ze zgodnej licencji są sprzeczne z jego obowiązkami wynikającymi z niniejszej licencji, obowiązki określone w zgodnej licencji mają charakter nadrzędny.
+    Udostępnienie kodu źródłowego: Rozpowszechniając lub udostępniając kopie utworu, licencjobiorca udostępnia przeznaczoną do odczytu maszynowego kopię kodu źródłowego lub wskazuje repozytorium, w którym ten kod będzie łatwo i bezpłatnie dostępny w czasie, w którym licencjobiorca rozpowszechnia lub udostępnia utwór.
+    Ochrona prawna: Niniejsza licencja nie upoważnia do korzystania z nazw handlowych, znaków towarowych, znaków usługowych ani nazw licencjodawcy, z wyjątkiem przypadków uzasadnionego i zwyczajowo przyjętego opisu pochodzenia utworu i powielania treści informacji o prawach autorskich.
+
+6. Ciąg autorstwa
+
+Pierwotny licencjodawca gwarantuje, że prawa autorskie do utworu oryginalnego przyznane na mocy niniejszej licencji stanowią jego własność lub że posiada je na mocy stosownej licencji oraz że jest uprawniony i upoważniony do udzielania licencji.
+
+Każdy współautor gwarantuje, że prawa autorskie do modyfikacji, jakie wprowadza do utworu, stanowią jego własność lub że posiada je na mocy stosownej licencji oraz że jest uprawniony i upoważniony do udzielania licencji.
+
+Każdorazowo gdy licencjobiorca akceptuje licencję, pierwotny licencjodawca i późniejsi współautorzy udzielają licencjo­ biorcy licencji w stosunku do ich wkładu w utwór na warunkach niniejszej licencji.
+7. Wyłączenie gwarancji
+
+Utwór ma charakter utworu nieukończonego, wciąż udoskonalanego przez wielu współautorów. Nie stanowi on utworu gotowego i dlatego może posiadać wady lub błędy właściwe dla tej formy opracowywania utworów.
+
+Z powyższych względów utwór przekazuje się na mocy licencji w postaci, w jakiej jest udostępniany, i bez jakichkolwiek gwarancji dotyczących utworu, w tym między innymi bez gwarancji przydatności handlowej, gwarancji przydatności do określonego celu, gwarancji braku wad lub błędów, gwarancji dokładności, gwarancji braku naruszenia praw własności intelektualnej innych niż prawa autorskie, o których mowa w pkt 6 niniejszej licencji.
+
+Niniejsze wyłączenie gwarancji stanowi istotny element licencji oraz warunek przyznania jakichkolwiek praw do utworu.
+8. Wyłączenie odpowiedzialności
+
+Z zastrzeżeniem przypadków działań umyślnych na szkodę osób fizycznych lub szkód wyrządzonych bezpośrednio osobom fizycznym, licencjodawca w żadnym wypadku nie ponosi odpowiedzialności za bezpośrednie lub pośrednie, majątkowe lub osobiste szkody dowolnego rodzaju powstałe w związku z licencją lub eksploatacją utworu, w tym między innymi za szkody związane z utratą wartości firmy, przerwami w pracy, awarią bądź zakłóceniami pracy komputera, utratą danych ani za wszelkie inne szkody gospodarcze, nawet jeżeli licencjodawca został poinformowany o możliwości ich wystąpienia. Licencjodawca ponosi jednak odpowiedzialność zgodnie z ustawowymi przepisami regulującymi kwestie odpowiedzialności za produkt w zakresie, w jakim takie przepisy mają zastosowanie do utworu.
+9. Dodatkowe umowy
+
+Rozpowszechniając utwór, licencjobiorca może postanowić o zawarciu dodatkowej umowy określającej zobowiązania lub świadczenia zgodne z niniejszą licencją. Przyjmując takie zobowiązania, licencjobiorca może występować jedynie we własnym imieniu i na własną odpowiedzialność, a nie w imieniu pierwotnego licencjodawcy ani żadnego innego współautora, oraz tylko pod warunkiem że licencjobiorca zobowiąże się względem każdego współautora do wypłacenia mu rekompensaty, jego obrony i zwolnienia go z odpowiedzialności, jeśli w związku z faktem, że licencjobiorca przyjął dodatkowe zobowiązania lub gwarancje, po stronie takiego współautora powstanie odpowiedzialność lub wysunięte zostaną wobec niego roszczenia.
+10. Akceptacja licencji
+
+Postanowienia niniejszej licencji mogą zostać zaakceptowane poprzez kliknięcie ikony „Wyrażam zgodę” umieszczonej na dole okna, w którym wyświetlono pełną treść niniejszej licencji, lub poprzez potwierdzenie własnej zgody w jakikolwiek inny podobny sposób zgodny z przepisami obowiązującego prawa. Kliknięcie takiej ikony jest równoznaczne z wyraźną i nieodwołalną akceptacją niniejszej licencji oraz wszystkich jej warunków.
+
+Analogicznie, nieodwołalną akceptację przez licencjobiorcę niniejszej licencji i wszystkich jej warunków stanowi także wykonanie jakiegokolwiek prawa przyznanego licencjobiorcy na mocy pkt 2 niniejszej licencji, takie jak wykorzystanie utworu, opracowanie przez licencjobiorcę utworu zależnego bądź rozpowszechnienie lub udostępnienie przez licencjo­ biorcę utworu lub jego kopii.
+11. Podawanie informacji do publicznej wiadomości
+
+W przypadku rozpowszechniania lub udostępniania przez licencjobiorcę utworu drogą komunikacji elektronicznej (na przykład poprzez oferowanie utworu do pobrania z lokalizacji zdalnej), w obrębie kanału rozpowszechniania lub nośnika (na przykład witryny internetowej) należy przynajmniej podać do wiadomości publicznej informacje wymagane przepisami obowiązującego prawa dotyczące licencjodawcy, licencji oraz sposobu, w jaki może zostać udostępniona, zawarta, przechowywana i zwielokrotniana przez licencjobiorcę.
+12. Wygaśnięcie licencji
+
+Licencja i prawa przyznane na jej mocy wygasają automatycznie z chwilą naruszenia przez licencjobiorcę warunków licencji.
+
+Takie wygaśnięcie nie skutkuje jednak wygaśnięciem licencji przysługującej którejkolwiek z osób, które otrzymały utwór od licencjobiorcy na mocy licencji, pod warunkiem że takie osoby nadal przestrzegają w pełni postanowień licencji.
+13. Postanowienia różne
+
+Nie naruszając postanowień pkt 9, licencja stanowi całość porozumienia między stronami w odniesieniu do utworu.
+
+Jeżeli jakiekolwiek postanowienie licencji okaże się nieważne lub niewykonalne na gruncie obowiązującego prawa, pozostaje to bez wpływu na ważność lub wykonalność licencji jako całości. Takie nieważne lub niewykonalne postano­ wienie należy interpretować lub dostosować w taki sposób, by zapewnić jego ważność i wykonalność.
+
+Komisja Europejska może publikować inne wersje językowe lub nowe wersje niniejszej licencji bądź zaktualizowane wersje załącznika, jeżeli jest to konieczne i uzasadnione, bez zawężania zakresu praw przyznanych na mocy licencji. Nowe wersje licencji publikuje się pod niepowtarzalnym numerem wersji.
+
+Wszystkie zatwierdzone przez Komisję Europejską wersje językowe niniejszej licencji mają taką samą wartość. Strony mogą korzystać z dowolnej wybranej przez siebie wersji językowej.
+14. Jurysdykcja
+
+Bez uszczerbku dla szczegółowych uzgodnień między stronami,
+
+— wszelkie spory sądowe związane z interpretacją niniejszej licencji, wynikłe między instytucjami, organami, urzędami lub agencjami Unii Europejskiej jako licencjodawcą a dowolnym licencjobiorcą, podlegają jurysdykcji Trybunału Sprawiedliwości Unii Europejskiej, zgodnie z postanowieniami art. 272 Traktatu o funkcjonowaniu Unii Europejskiej,
+
+— wszelkie spory sądowe związane z interpretacją niniejszej licencji, wynikłe między innymi stronami, podlegają wyłącznej jurysdykcji sądu właściwego miejscowo dla miejsca zamieszkania licencjodawcy bądź jego głównego miejsca prowadzenia działalności gospodarczej.
+15. Prawo właściwe
+
+Bez uszczerbku dla szczegółowych uzgodnień między stronami,
+
+— prawem właściwym dla wykonania niniejszej licencji jest prawo państwa członkowskiego Unii Europejskiej, w którym zamieszkuje lub posiada swą siedzibę (statutową) licencjodawca,
+
+— prawem właściwym dla wykonania niniejszej licencji jest prawo belgijskie, jeżeli licencjodawca nie ma miejsca zamieszkania lub siedziby (statutowej) na terenie państwa członkowskiego Unii Europejskiej.
+Załącznik
+
+„Zgodne licencje” w rozumieniu pkt 5 EUPL to:
+
+— GNU General Public License (GPL) wersja 2, wersja 3
+
+— GNU Affero General Public License (AGPL) wersja 3
+
+— Open Software License (OSL) wersja 2.1, wersja 3.0
+
+— Eclipse Public License (EPL) wersja 1.0
+
+— CeCILL wersja 2.0, wersja 2.1
+
+— Mozilla Public Licence (MPL) wersja 2
+
+— GNU Lesser General Public Licence (LGPL) wersja 2.1, wersja 3
+
+— Creative Commons Attribution-ShareAlike wersja 3.0 Unported (CC BY-SA 3.0) w odniesieniu do utworów innych niż oprogramowanie
+
+— licencja publiczna Unii Europejskiej (EUPL) wersja 1.1, wersja 1.2
+
+— Québec Free and Open-Source Licence – Reciprocity (LiLiQ-R) lub Strong Reciprocity (LiLiQ-R+)
+
+Komisja Europejska może zaktualizować ten załącznik, aby uwzględnić w nim późniejsze wersje wyżej wymienionych licencji bez sporządzania nowej wersji EUPL, o ile te nowe wersje przyznają prawa przewidziane w pkt 2 niniejszej licencji oraz chronią kod źródłowy wchodzący w jej zakres przed wyłącznym przywłaszczeniem.
+
+Wszelkie inne zmiany lub uzupełnienia niniejszego załącznika wymagają sporządzenia nowej wersji EUPL.
