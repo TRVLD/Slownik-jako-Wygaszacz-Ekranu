@@ -1,0 +1,85 @@
+SŁOWNIK JAKO WYGASZACZ EKRANU – wersja dla COSMIC (Pop!_OS, Fedora, Arch…)
+==========================================================================
+
+Wygaszacz ekranu, który po chwili bezczynności pokazuje na animowanym tle
+(zorza polarna, głębia oceanu, figury Lublina albo barwy Wrocławia) losowe
+hasło ze Słownika Języka Polskiego z definicją.
+
+Wymagania: pulpit COSMIC (Wayland) i jeden z systemów:
+  • Pop!_OS 24.04 lub nowszy, Ubuntu, Debian  – instaluje gotowy pakiet .deb
+  • Fedora (np. Fedora COSMIC)                  – kompiluje ze źródeł (kilka sekund)
+  • Arch, Manjaro, EndeavourOS                  – kompiluje ze źródeł
+  • openSUSE                                    – kompiluje ze źródeł
+Instalator sam rozpoznaje system i używa jego menedżera pakietów (apt, dnf,
+pacman, zypper). Potrzebny internet: dociągnie kilka małych pakietów
+(gjs, libadwaita, czcionki URW, a przy kompilacji także kompilator
+i nagłówki bibliotek). Nie pobiera środowiska GNOME ani Flatpaka.
+
+
+INSTALACJA (2 minuty)
+---------------------
+1. Rozpakuj paczkę i wejdź do katalogu:
+
+       tar xzf wyraz-cosmic-*.tar.gz
+       cd wyraz-cosmic-*/
+
+2. Uruchom instalator jako zwykły użytkownik (sam zapyta o hasło do sudo):
+
+       ./zainstaluj-wyraz.sh
+
+   Na początku wypisze rozpoznany system, np.
+       ➜ System: Pop!_OS 24.04 LTS (menedżer pakietów: apt)
+       ➜ System: Fedora Linux 44 (menedżer pakietów: dnf)
+   Potem zainstaluje program i doda aplet (literę „W”) do górnego panelu.
+
+   Opcje:  --bez-panelu   bez zmian w panelu
+           --ze-zrodel    kompilacja ze źródeł także w Pop!_OS
+
+   Ręcznie w Pop!_OS:  sudo apt install ./wyraz-cosmic_*_amd64.deb
+   i dodanie apletu: Ustawienia COSMIC → Pulpit → Panel → Aplety →
+   Dodaj aplet → „Słownik jako Wygaszacz Ekranu”.
+
+3. Gotowe. Po minucie bezczynności pojawi się wygaszacz. Ruch myszy albo
+   dowolny klawisz go zamyka.
+
+Jeśli litera „W” nie pojawiła się w panelu, wyloguj się i zaloguj ponownie
+albo dodaj aplet ręcznie (jak wyżej).
+
+Fedora Atomic / Silverblue (system tylko do odczytu): instalator użyje
+wersji Flatpak, jeśli jest w paczce (wyraz-cosmic.flatpak).
+
+
+UŻYWANIE
+--------
+• Kliknięcie „W” w panelu otwiera menu:
+    – Pokaż wygaszacz        (ruszy po 1,5 s, gdy puścisz mysz)
+    – Wstrzymaj na godzinę   (np. na czas prezentacji)
+    – Ustawienia…
+• Ustawienia (styl, liczba haseł, zegar, czas startu, kod zamykający,
+  wyszukiwarka w słowniku, archiwum haseł) są też w menu aplikacji:
+  „Słownik jako Wygaszacz Ekranu”, albo poleceniem:  wyraz-ustawienia
+• COSMIC sam wyłącza ekran po 15 minutach (Ustawienia → Zasilanie).
+  Wygaszacz pokazuje się wcześniej; w jego ustawieniach jest przycisk
+  „Wydłuż”, gdyby ekran gasł za szybko.
+
+
+ODINSTALOWANIE
+--------------
+       ./zainstaluj-wyraz.sh --odinstaluj
+   (z tego samego rozpakowanego katalogu: usuwa pakiet albo pliki
+   zainstalowane ze źródeł oraz aplet z panelu)
+
+
+ZAPOMNIANY KOD ZAMYKAJĄCY
+-------------------------
+Przejdź do konsoli tekstowej (Ctrl+Alt+F3), zaloguj się i wpisz:
+
+       gsettings set eu.jaroszek.Wyraz unlock-code-enabled false
+
+Wróć do pulpitu (Ctrl+Alt+F1 albo F2) i porusz myszą.
+Kod chroni tylko przed przypadkowym zamknięciem wygaszacza – nie zastępuje
+blokady ekranu COSMIC (Super+Escape) ani hasła konta.
+
+
+Autor: M.T. Jaroszek · licencja EUPL 1.2 · program udostępniany „tak jak
+jest”, bez gwarancji. Dane: sjp.pl, Wordset (CC BY-SA 4.0).

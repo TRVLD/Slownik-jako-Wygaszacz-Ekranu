@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Słownik jako Wygaszacz Ekranu
+Name[en]=Dictionary Screensaver
+Comment=Ustawienia wygaszacza ekranu ze słownikiem polskim i angielskim
+Comment[en]=Settings of the Polish and English dictionary screensaver
+Exec=wyraz-ustawienia
+Icon=eu.jaroszek.Wyraz
+Terminal=false
+Type=Application
+Categories=Settings;DesktopSettings;
+Keywords=wygaszacz;screensaver;słownik;dictionary;sjp;COSMIC;
+StartupNotify=true

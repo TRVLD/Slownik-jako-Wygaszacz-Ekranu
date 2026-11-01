@@ -1,0 +1,4 @@
+#!/bin/sh
+# Okno ustawień „Słownik jako Wygaszacz Ekranu” (GJS + libadwaita).
+export WYRAZ_DATA_DIR="${WYRAZ_DATA_DIR:-@PKGDATA@}"
+exec gjs -m "@PKGDATA@/ustawienia/main.js" "$@"

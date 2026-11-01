@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Słownik jako Wygaszacz Ekranu
+Name[en]=Dictionary Screensaver
+Comment=Wygaszacz ekranu z hasłami ze słownika (aplet panelu COSMIC)
+Comment[en]=Screensaver with dictionary entries (COSMIC panel applet)
+Type=Application
+Exec=wyraz-cosmic
+Terminal=false
+Categories=COSMIC;
+Keywords=COSMIC;Applet;Wygaszacz;Screensaver;Słownik;
+Icon=eu.jaroszek.Wyraz-symbolic
+NoDisplay=true
+X-CosmicApplet=true
+X-HostWaylandDisplay=true
+X-OverflowPriority=10

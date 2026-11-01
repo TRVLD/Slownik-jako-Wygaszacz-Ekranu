@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>eu.jaroszek.Wyraz</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>EUPL-1.2</project_license>
+  <name>Słownik jako Wygaszacz Ekranu</name>
+  <summary>Wygaszacz ekranu COSMIC z hasłami ze słownika polskiego i angielskiego</summary>
+  <description>
+    <p>
+      Aplet panelu COSMIC, który po okresie bezczynności zamienia ekran
+      w animowany wygaszacz (zorza polarna, głębia oceanu, figury Lublina
+      albo barwy Wrocławia) i pokazuje losowe hasło ze Słownika Języka
+      Polskiego oraz opcjonalnie z angielskiego słownika Wordset.
+    </p>
+    <p>
+      Wersja dla COSMIC (Pop!_OS, Wayland) wtyczki GNOME Shell
+      „Słownik jako Wygaszacz Ekranu”.
+    </p>
+  </description>
+  <launchable type="desktop-id">eu.jaroszek.Wyraz.desktop</launchable>
+  <url type="homepage">https://github.com/TRVLD/Slownik-jako-Wygaszacz-Ekranu/</url>
+  <developer id="eu.jaroszek">
+    <name>M.T. Jaroszek</name>
+  </developer>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.9.5~cosmic1" date="2026-11-01"/>
+  </releases>
+</component>

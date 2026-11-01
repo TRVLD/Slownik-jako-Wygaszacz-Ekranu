@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Schemat ustawień „Słownik jako Wygaszacz Ekranu” dla COSMIC (Flatpak
+  eu.jaroszek.Wyraz).
+
+  W Flatpaku GSettings zapisuje wartości w pliku
+  ~/.var/app/eu.jaroszek.Wyraz/config/glib-2.0/settings/keyfile, wspólnym
+  dla apletu panelu (wygaszacz) i okna ustawień. Klucze i wartości są takie
+  same jak w wersji dla GNOME Shell, więc ustawienia można przenieść 1:1.
+-->
+<schemalist>
+  <!-- Wyliczenia: nazwy (nick) to wartości zapisywane w dconf i używane
+       w kodzie; liczby są tylko wewnętrzną numeracją GSettings. -->
+
+  <!-- Style wygaszacza: Aurora Borealis, Blue Ocean, Lublin Renesans,
+       Wroclove Herbowy. -->
+  <enum id="eu.jaroszek.Wyraz.BackgroundStyle">
+    <value nick="aurora" value="0"/>
+    <value nick="ocean" value="1"/>
+    <value nick="lublin" value="2"/>
+    <value nick="wroclove" value="3"/>
+  </enum>
+
+  <!-- Rozmiar zegara: Mały, Średni, Duży, Bardzo duży (ułamki wysokości
+       ekranu w screensaver.js). -->
+  <enum id="eu.jaroszek.Wyraz.ClockSize">
+    <value nick="small" value="0"/>
+    <value nick="medium" value="1"/>
+    <value nick="large" value="2"/>
+    <value nick="huge" value="3"/>
+  </enum>
+
+  <!-- Położenie zegara: Losowo, Specjalnie (miejsce zależne od stylu),
+       Własne (clock-x, clock-y). -->
+  <enum id="eu.jaroszek.Wyraz.ClockPosition">
+    <value nick="random" value="0"/>
+    <value nick="special" value="1"/>
+    <value nick="custom" value="2"/>
+  </enum>
+
+  <!-- Styl (krój) zegara: Neon, Futhark Runes, San Francisco (Inter),
+       Source Sans Pro Black, Garamond. -->
+  <enum id="eu.jaroszek.Wyraz.ClockStyle">
+    <value nick="neon" value="0"/>
+    <value nick="futhark" value="1"/>
+    <value nick="sanfrancisco" value="2"/>
+    <value nick="sourcesans" value="3"/>
+    <value nick="garamond" value="4"/>
+  </enum>
+
+  <schema id="eu.jaroszek.Wyraz" path="/eu/jaroszek/Wyraz/">
+    <!-- Słowa: ile haseł dziennie z każdego słownika i jak długo jedno
+         hasło jest na ekranie. -->
+    <key name="words-per-day" type="i">
+      <range min="0" max="100"/>
+      <default>5</default>
+      <summary>Liczba polskich haseł dziennie</summary>
+      <description>Ile haseł ze słownika polskiego jest losowanych na każdy dzień. Wygaszacz pokazuje je po kolei i powtarza w ciągu dnia.</description>
+    </key>
+
+    <key name="words-per-day-en" type="i">
+      <range min="0" max="100"/>
+      <default>0</default>
+      <summary>Liczba angielskich haseł dziennie</summary>
+      <description>Ile haseł ze słownika angielskiego (Wordset) jest losowanych na każdy dzień; przeplatane z polskimi.</description>
+    </key>
+
+    <key name="change-interval" type="i">
+      <range min="5" max="3600"/>
+      <default>30</default>
+      <summary>Czas wyświetlania jednego hasła (sekundy)</summary>
+      <description>Co ile sekund wygaszacz przechodzi do następnego hasła.</description>
+    </key>
+
+    <!-- Start wygaszacza po bezczynności. -->
+    <key name="idle-minutes" type="i">
+      <range min="1" max="240"/>
+      <default>1</default>
+      <summary>Czas bezczynności przed uruchomieniem (minuty)</summary>
+      <description>Po ilu minutach bez ruchu myszy i bez naciśnięcia klawisza włącza się wygaszacz. Minimum to 1 minuta.</description>
+    </key>
+
+    <!-- Wygląd: styl i jego warianty (każdy styl ma własny klucz wariantu). -->
+    <key name="background-style" enum="eu.jaroszek.Wyraz.BackgroundStyle">
+      <default>'lublin'</default>
+      <summary>Styl tła</summary>
+      <description>Animowane tło wygaszacza: aurora (zorza polarna), ocean, lublin (Lublin Renesans) albo wroclove (Wroclove Herbowy).</description>
+    </key>
+
+    <key name="renaissance-font" type="s">
+      <default>'Quintessential'</default>
+      <summary>Wariant stylu Lublin Renesans</summary>
+      <description>Odręczne pismo renesansowe używane do haseł w stylu Lublin Renesans (Quintessential, Fondamento albo Carattere).</description>
+    </key>
+
+    <key name="wroclove-text-font" type="s">
+      <default>'Belleza'</default>
+      <summary>Wariant stylu Wroclove Herbowy</summary>
+      <description>Belleza (w duchu Optimy), Hind (w duchu Frutigera) albo systemowy Adwaita Sans.</description>
+    </key>
+
+    <key name="font-family" type="s">
+      <default>'P052'</default>
+      <summary>Wariant stylów Aurora Borealis i Blue Ocean</summary>
+      <description>Krój szeryfowy hasła i definicji (domyślnie P052, klon Palatino).</description>
+    </key>
+
+    <!-- Zegar jako znak wodny. -->
+    <key name="clock-enabled" type="b">
+      <default>true</default>
+      <summary>Pokaż zegar</summary>
+      <description>Godzina na wygaszaczu w postaci znaku wodnego.</description>
+    </key>
+
+    <key name="clock-transparency" type="i">
+      <range min="5" max="95"/>
+      <default>85</default>
+      <summary>Transparentność zegara (%)</summary>
+      <description>0 to pełne krycie, im więcej, tym zegar jest bardziej przezroczysty.</description>
+    </key>
+
+    <key name="clock-size" enum="eu.jaroszek.Wyraz.ClockSize">
+      <default>'medium'</default>
+      <summary>Rozmiar zegara</summary>
+      <description>Mały, średni, duży albo bardzo duży.</description>
+    </key>
+
+    <key name="clock-position" enum="eu.jaroszek.Wyraz.ClockPosition">
+      <default>'special'</default>
+      <summary>Położenie zegara</summary>
+      <description>Losowo: przy każdym haśle inne wolne miejsce, z dala od hasła i definicji. Specjalnie: znak wodny w miejscu zależnym od stylu (Aurora Borealis i Lublin Renesans: X = 50, Y = 100; Blue Ocean: u góry pośrodku; Wroclove Herbowy: środek najczerwieńszej ćwiartki). Własne: znak wodny w miejscu podanym przez clock-x i clock-y.</description>
+    </key>
+
+    <key name="clock-x" type="i">
+      <range min="0" max="100"/>
+      <default>50</default>
+      <summary>Położenie zegara w poziomie (%)</summary>
+      <description>Dla położenia „Własne”: 0 to zegar przy lewej krawędzi ekranu, 100 przy prawej, 50 pośrodku. Proporcja jest taka sama na każdym ekranie.</description>
+    </key>
+
+    <key name="clock-y" type="i">
+      <range min="0" max="100"/>
+      <default>50</default>
+      <summary>Położenie zegara w pionie (%)</summary>
+      <description>Dla położenia „Własne”: 0 to zegar przy górnej krawędzi ekranu, 100 przy dolnej, 50 pośrodku. Proporcja jest taka sama na każdym ekranie.</description>
+    </key>
+
+    <key name="clock-style" enum="eu.jaroszek.Wyraz.ClockStyle">
+      <default>'sanfrancisco'</default>
+      <summary>Styl zegara</summary>
+      <description>Krój cyfr zegara. Po zmianie stylu wygaszacza ustawiany jest styl sugerowany (Aurora Borealis: Futhark Runes, Blue Ocean: Source Sans Pro Black, Lublin Renesans: San Francisco, Wroclove Herbowy: Garamond); można go zmienić.</description>
+    </key>
+
+    <!-- Zachowanie wygaszacza. -->
+
+    <key name="respect-inhibitors" type="b">
+      <default>true</default>
+      <summary>Nie przeszkadzaj podczas filmów i prezentacji</summary>
+      <description>Nie uruchamiaj wygaszacza, gdy aplikacja blokuje bezczynność (protokół idle-inhibit) albo gdy przeglądarka lub odtwarzacz wideo (MPRIS) właśnie odtwarza. Odtwarzacze samej muzyki (np. Spotify) nie wstrzymują wygaszacza.</description>
+    </key>
+
+
+    <!-- Wstrzymanie z menu apletu („Wstrzymaj na godzinę”): do tej chwili
+         (sekundy od 1970-01-01, UTC) wygaszacz nie startuje sam. 0: brak. -->
+    <key name="paused-until" type="x">
+      <default>0</default>
+      <summary>Wstrzymanie wygaszacza (wewnętrzne)</summary>
+      <description>Chwila (Unix time), do której wygaszacz nie uruchamia się po bezczynności.</description>
+    </key>
+
+    <!-- Kod zamykający. Kod wyłączysz awaryjnie poleceniem z README (flatpak run --command=gsettings …). -->
+    <key name="unlock-code-enabled" type="b">
+      <default>false</default>
+      <summary>Wymagaj kodu do zamknięcia wygaszacza</summary>
+      <description>Gdy włączone i kod jest ustawiony, ruch myszy lub klawisz pokazuje pole kodu zamiast zamykać wygaszacz.</description>
+    </key>
+
+    <key name="unlock-code" type="s">
+      <default>''</default>
+      <summary>Skrót kodu zamykającego (wewnętrzne)</summary>
+      <description>Sól i skrót SHA-256 kodu (1–6 liter lub cyfr). Sam kod nie jest zapisywany.</description>
+    </key>
+
+    <!-- Liczniki-przyciski: okno ustawień albo menu apletu zwiększa licznik,
+         a wygaszacz (aplet w panelu COSMIC) reaguje na każdą jego zmianę. Wartość nie ma
+         znaczenia, liczy się tylko zmiana. -->
+    <key name="reset-today-request" type="i">
+      <default>0</default>
+      <summary>Żądanie nowego losowania haseł na dziś (wewnętrzne)</summary>
+      <description>Zwiększane przez okno ustawień, aby wylosować dzisiejsze hasła od nowa.</description>
+    </key>
+
+    <key name="preview-request" type="i">
+      <default>0</default>
+      <summary>Żądanie podglądu (wewnętrzne)</summary>
+      <description>Zwiększane przez okno ustawień, aby uruchomić podgląd wygaszacza.</description>
+    </key>
+  </schema>
+</schemalist>
