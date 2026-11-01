@@ -6,7 +6,7 @@ z angielskiego słownika *Wordset*) wraz z definicją. Działa w dwóch wersjach
 jako rozszerzenie **GNOME Shell** i jako aplet panelu **COSMIC**.
 
 | Aurora Borealis | Blue Ocean |
-|---|---|
+|:---:|:---:|
 | <img width="400" alt="Aurora Borealis" src="https://github.com/user-attachments/assets/3c5a7020-3b86-4f98-a653-20cf3cd54f10" /> | <img width="400" alt="Blue Ocean" src="https://github.com/user-attachments/assets/8d18555e-b27a-4dc6-844b-6130a195137e" /> |
 | **Lublin Renesans** | **Wroclove Herbowy** |
 | <img width="400" alt="Lublin Renesans" src="https://github.com/user-attachments/assets/9d43e157-8ebf-4c48-95da-e2c05a95bb23" /> | <img width="400" alt="Wroclove Herbowy" src="https://github.com/user-attachments/assets/d569f005-7402-439e-99bd-52d8368193ee" /> |
@@ -14,7 +14,7 @@ jako rozszerzenie **GNOME Shell** i jako aplet panelu **COSMIC**.
 Autor: **[M.T. Jaroszek](https://www.linkedin.com/in/jaroszek/)** · licencja
 **EUPL 1.2** ([wersja polska](https://eupl.eu/1.2/pl/), plik
 [`LICENSE.md`](LICENSE.md)) · udostępniane „tak jak jest” (as-is), bez
-gwarancji. Program powstał we współpracy z Claude (Anthropic).
+gwarancji. Program powstał z użyciem narzędzi Claude (Anthropic).
 
 ## Która wersja?
 
@@ -23,7 +23,9 @@ gwarancji. Program powstał we współpracy z Claude (Anthropic).
 | **GNOME 50** (np. Fedora 44), Wayland | [`GNOME/`](GNOME/) | rozszerzenie GNOME Shell | [GNOME/README.md](GNOME/README.md) |
 | **COSMIC** (Pop!_OS 24.04+, Fedora, Arch, openSUSE…), Wayland | [`COSMIC/`](COSMIC/) | aplet panelu (litera **W**) | [COSMIC/README.md](COSMIC/README.md) |
 
-Obie wersje mają te same style, shadery, bazę haseł i okno ustawień.
+Metodyka testów: Sztuczna Inteligencja najpierw, później autor w systemie Fedora Workstation plus odpowiednie środowisko graficzne, następnie testy użytkownika codziennego danego środowiska graficznego, na listopad 2026 jedyne pozytywne odpowiedzi pochodzą od użytkowników GNOME i COSMIC. Rozwiązanie w dalszym ciągu może zawierać drobne defekty, jak renderowanie czcionek, niemniej jednak podziękowania dla osób testujących za wykonanie testów użytkownika.
+
+Obie wersje mają w zasadzie te same style, shadery, bazę haseł i okno ustawień.
 Więcej informacji jest w [Wiki](https://github.com/TRVLD/Slownik-jako-Wygaszacz-Ekranu/wiki).
 
 ## Co potrafi
@@ -132,7 +134,7 @@ Slownik-jako-Wygaszacz-Ekranu/
 - **Czcionki:** na licencji SIL OFL 1.1 (z Google Fonts: Crimson Text,
   Belleza, Hind, Quintessential, Fondamento, Carattere, Exo 2; oraz Wyraz
   Futhark) i URW base35 (C059, P052; AGPL-3.0 z wyjątkiem dla czcionek).
-- Figury stylu Lublin Renesans odwzorowują elementy identyfikacji wizualnej
-  miasta Lublin.
+- Figury stylu Lublin Renesans inspirują się stylem elementów identyfikacji wizualnej
+  miasta Lublin, ale nie składają się na Znak który jest zastrzeżony.
 - Pełna lista składników open source z licencjami jest w oknie ustawień,
   na karcie „O wtyczce” (GNOME) albo „O programie” (COSMIC).
